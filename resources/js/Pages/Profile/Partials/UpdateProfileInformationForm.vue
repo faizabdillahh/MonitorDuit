@@ -33,7 +33,7 @@ const form = useForm({
                 <input
                     id="name"
                     type="text"
-                    class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
+                    class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500 transition-all"
                     v-model="form.name"
                     required
                     autofocus
@@ -47,7 +47,7 @@ const form = useForm({
                 <input
                     id="email"
                     type="email"
-                    class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
+                    class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500 transition-all"
                     v-model="form.email"
                     required
                     autocomplete="username"
@@ -70,7 +70,7 @@ const form = useForm({
 
                 <div
                     v-show="status === 'verification-link-sent'"
-                    class="mt-2 text-sm font-medium text-emerald-600 dark:text-emerald-400"
+                    class="mt-2 text-sm font-medium text-brand-600 dark:text-brand-400"
                 >
                     Link verifikasi baru telah dikirimkan ke alamat email Anda.
                 </div>
@@ -80,7 +80,7 @@ const form = useForm({
                 <button
                     type="submit"
                     :disabled="form.processing"
-                    class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-xl shadow-lg shadow-emerald-500/20 disabled:opacity-50 transition-all"
+                    class="px-5 py-2.5 bg-brand-500 hover:bg-brand-600 text-white font-medium rounded-xl shadow-lg shadow-brand-500/20 disabled:opacity-50 transition-all"
                 >
                     Simpan Perubahan
                 </button>
@@ -91,7 +91,7 @@ const form = useForm({
                     leave-active-class="transition ease-in-out duration-300"
                     leave-to-class="opacity-0"
                 >
-                    <p v-if="form.recentlySuccessful" class="text-sm text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1.5">
+                    <p v-if="form.recentlySuccessful" class="text-sm text-brand-600 dark:text-brand-400 font-medium flex items-center gap-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
                         Tersimpan
                     </p>

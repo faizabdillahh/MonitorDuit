@@ -8,12 +8,12 @@ import { Link } from '@inertiajs/vue3';
         class="flex min-h-screen flex-col items-center justify-center bg-slate-50 pt-6 sm:pt-0 dark:bg-slate-950 px-4 relative overflow-hidden"
     >
         <!-- Background Glows -->
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/10 dark:bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-500/10 dark:bg-brand-500/5 blur-[120px] rounded-full pointer-events-none"></div>
 
         <div class="relative z-10 w-full max-w-md">
             <div class="flex justify-center mb-8">
                 <Link href="/" class="flex items-center gap-3 group">
-                    <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-xl shadow-emerald-500/30 group-hover:scale-105 transition-transform duration-300">
+                    <div class="w-12 h-12 bg-gradient-to-br from-brand-400 to-brand-600 rounded-2xl flex items-center justify-center shadow-xl shadow-brand-500/30 group-hover:scale-105 transition-transform duration-300">
                         <span class="text-white font-bold text-xl">M</span>
                     </div>
                     <span class="font-bold text-2xl tracking-tight text-slate-900 dark:text-white">MonitorDuit</span>

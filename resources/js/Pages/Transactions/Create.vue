@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Head, useForm } from '@inertiajs/vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import { useToast } from '@/Composables/useToast'
 import axios from 'axios'
+import { Upload, X, Loader2, Sparkles, CheckCircle2, ChevronDown } from 'lucide-vue-next'
 
 const props = defineProps({
   categories: Array,
@@ -28,6 +29,16 @@ const previewUrl = ref(null)
 const isScanning = ref(false)
 const scanStatus = ref('')
 const fileInput = ref(null)
+
+const showCategoryDropdown = ref(false)
+const selectedCategory = computed(() => {
+  return props.categories.find(c => c.id === form.category_id) || null
+})
+
+function selectCategory(cat) {
+  form.category_id = cat.id
+  showCategoryDropdown.value = false
+}
 
 function handleFileChange(e) {
   const file = e.target.files[0]
@@ -110,12 +121,12 @@ function submit() {
           <input type="file" ref="fileInput" class="hidden" accept="image/jpeg,image/png,image/webp,image/heic" @change="handleFileChange" />
           
           <div v-if="!previewUrl" class="text-center w-full">
-            <div class="w-16 h-16 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-emerald-100 dark:border-emerald-500/20">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <div class="w-16 h-16 bg-brand-50 dark:bg-brand-500/10 text-brand-500 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-brand-100 dark:border-brand-500/20">
+              <Upload class="w-8 h-8" />
             </div>
             <h3 class="text-slate-700 dark:text-slate-300 font-semibold mb-2">Upload Foto Struk</h3>
             <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Format JPG, PNG, WEBP max 10MB</p>
-            <button @click="triggerFileInput" type="button" class="px-5 py-2.5 bg-emerald-500 text-white font-medium rounded-xl hover:bg-emerald-600 transition-colors shadow-lg shadow-emerald-500/20">
+            <button @click="triggerFileInput" type="button" class="px-5 py-2.5 bg-brand-500 text-white font-medium rounded-xl hover:bg-brand-600 transition-colors shadow-lg shadow-brand-500/20">
               Pilih File Gambar
             </button>
           </div>
@@ -124,24 +135,21 @@ function submit() {
             <div class="relative w-full rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 mb-4 bg-slate-100 dark:bg-slate-800">
               <img :src="previewUrl" class="w-full object-contain max-h-[300px]" alt="Preview struk" />
               <button v-if="!isScanning" @click="triggerFileInput" type="button" class="absolute top-2 right-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-2 rounded-lg shadow text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                <X class="w-4 h-4" />
               </button>
             </div>
 
-            <button v-if="!isScanning && form.source === 'manual'" @click="processScan" type="button" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:-translate-y-0.5 transition-all flex justify-center items-center gap-2">
-              ✨ Ekstrak Data dengan AI
+            <button v-if="!isScanning && form.source === 'manual'" @click="processScan" type="button" class="w-full py-3 bg-gradient-to-r from-brand-500 to-teal-500 text-white font-bold rounded-xl shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40 hover:-translate-y-0.5 transition-all flex justify-center items-center gap-2">
+              <Sparkles class="w-5 h-5" /> Ekstrak Data dengan AI
             </button>
 
-            <div v-if="isScanning" class="w-full py-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium rounded-xl flex justify-center items-center gap-3">
-              <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
+            <div v-if="isScanning" class="w-full py-3 bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-medium rounded-xl flex justify-center items-center gap-3">
+              <Loader2 class="animate-spin h-5 w-5" />
               {{ scanStatus }}
             </div>
 
-            <div v-if="form.source === 'ai'" class="w-full py-2.5 mt-2 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 font-medium rounded-xl text-center text-sm border border-green-200 dark:border-green-800">
-              ✅ Data berhasil diekstrak
+            <div v-if="form.source === 'ai'" class="w-full py-2.5 mt-2 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 font-medium rounded-xl text-center text-sm border border-green-200 dark:border-green-800 flex items-center justify-center gap-2">
+              <CheckCircle2 class="w-4 h-4" /> Data berhasil diekstrak
             </div>
           </div>
         </div>
@@ -152,8 +160,8 @@ function submit() {
             
             <!-- AI Badge -->
             <div v-if="form.source === 'ai'" class="flex items-center gap-2 mb-2">
-              <span class="px-2 py-1 text-xs font-bold rounded-md bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
-                ✨ Diisi oleh AI
+              <span class="px-2 py-1 text-xs font-bold rounded-md bg-brand-100 dark:bg-brand-500/20 text-brand-700 dark:text-brand-400 flex items-center gap-1">
+                <Sparkles class="w-3 h-3" /> Diisi oleh AI
               </span>
               <span v-if="form.ai_confidence" :class="[
                 'px-2 py-1 text-xs font-bold rounded-md',
@@ -169,35 +177,61 @@ function submit() {
               <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Total Harga <span class="text-red-500">*</span></label>
               <div class="relative">
                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-medium">Rp</span>
-                <input v-model="form.total_amount" type="number" step="0.01" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" placeholder="0" required :class="{'ring-2 ring-emerald-500': form.source === 'ai' && form.total_amount}" />
+                <input v-model="form.total_amount" type="number" step="0.01" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500 font-mono" placeholder="0" required :class="{'ring-2 ring-brand-500': form.source === 'ai' && form.total_amount}" />
               </div>
               <p v-if="form.errors.total_amount" class="text-red-500 text-xs mt-1">{{ form.errors.total_amount }}</p>
             </div>
 
             <div>
               <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nama Merchant</label>
-              <input v-model="form.merchant_name" type="text" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Contoh: Indomaret, Tokopedia" :class="{'ring-2 ring-emerald-500': form.source === 'ai' && form.merchant_name}" />
+              <input v-model="form.merchant_name" type="text" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500" placeholder="Contoh: Indomaret, Tokopedia" :class="{'ring-2 ring-brand-500': form.source === 'ai' && form.merchant_name}" />
               <p v-if="form.errors.merchant_name" class="text-red-500 text-xs mt-1">{{ form.errors.merchant_name }}</p>
             </div>
 
             <div>
               <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tanggal Transaksi <span class="text-red-500">*</span></label>
-              <input v-model="form.transaction_date" type="date" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" required :class="{'ring-2 ring-emerald-500': form.source === 'ai' && form.transaction_date}" />
+              <input v-model="form.transaction_date" type="date" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500" required :class="{'ring-2 ring-brand-500': form.source === 'ai' && form.transaction_date}" />
               <p v-if="form.errors.transaction_date" class="text-red-500 text-xs mt-1">{{ form.errors.transaction_date }}</p>
             </div>
 
-            <div>
+            <div class="relative">
               <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Kategori <span class="text-red-500">*</span></label>
-              <select v-model="form.category_id" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" required>
-                <option value="" disabled>Pilih Kategori</option>
-                <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.icon }} {{ cat.name }}</option>
-              </select>
+              
+              <!-- Custom Select Dropdown -->
+              <button type="button" @click="showCategoryDropdown = !showCategoryDropdown" class="w-full flex items-center justify-between px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-left outline-none focus:ring-2 focus:ring-brand-500 transition-shadow">
+                <span v-if="selectedCategory" class="flex items-center gap-3">
+                  <span class="w-6 h-6 rounded flex items-center justify-center text-xs" :style="{ backgroundColor: selectedCategory.color + '20' }">{{ selectedCategory.icon }}</span>
+                  <span class="text-slate-900 dark:text-white font-medium text-sm">{{ selectedCategory.name }}</span>
+                </span>
+                <span v-else class="text-slate-500">Pilih Kategori</span>
+                <ChevronDown class="w-4 h-4 text-slate-400 transition-transform" :class="{'rotate-180': showCategoryDropdown}" />
+              </button>
+
+              <!-- Transparent Overlay for Click-away -->
+              <div v-if="showCategoryDropdown" @click="showCategoryDropdown = false" class="fixed inset-0 z-10"></div>
+
+              <!-- Dropdown Menu -->
+              <div v-if="showCategoryDropdown" class="absolute z-20 w-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl max-h-64 overflow-auto py-2">
+                <button v-for="cat in categories" :key="cat.id" type="button" @click="selectCategory(cat)" class="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors text-left">
+                  <span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm" :style="{ backgroundColor: cat.color + '20' }">{{ cat.icon }}</span>
+                  <div class="flex flex-col">
+                    <span class="text-slate-900 dark:text-white text-sm font-medium">{{ cat.name }}</span>
+                  </div>
+                </button>
+                <div v-if="categories.length === 0" class="px-4 py-3 text-sm text-slate-500 text-center">
+                  Tidak ada kategori tersedia.
+                </div>
+              </div>
+              
+              <!-- Invisible real input for validation tracking -->
+              <input type="text" v-model="form.category_id" class="hidden" required />
+
               <p v-if="form.errors.category_id" class="text-red-500 text-xs mt-1">{{ form.errors.category_id }}</p>
             </div>
 
             <div>
               <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Catatan</label>
-              <textarea v-model="form.notes" rows="2" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Opsional"></textarea>
+              <textarea v-model="form.notes" rows="2" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500" placeholder="Opsional"></textarea>
               <p v-if="form.errors.notes" class="text-red-500 text-xs mt-1">{{ form.errors.notes }}</p>
             </div>
 
@@ -205,7 +239,7 @@ function submit() {
               <Link :href="route('transactions.index')" class="px-5 py-2.5 rounded-xl font-medium text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
                 Batal
               </Link>
-              <button type="submit" :disabled="form.processing" class="px-6 py-2.5 rounded-xl font-bold text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-lg shadow-emerald-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+              <button type="submit" :disabled="form.processing" class="px-6 py-2.5 rounded-xl font-bold text-white bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 shadow-lg shadow-brand-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
                 Simpan Transaksi
               </button>
             </div>

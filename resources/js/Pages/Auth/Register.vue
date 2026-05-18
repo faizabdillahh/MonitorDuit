@@ -31,7 +31,7 @@ const submit = () => {
                 <input
                     id="name"
                     type="text"
-                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all placeholder:text-slate-400"
+                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all placeholder:text-slate-400"
                     v-model="form.name"
                     required
                     autofocus
@@ -46,7 +46,7 @@ const submit = () => {
                 <input
                     id="email"
                     type="email"
-                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all placeholder:text-slate-400"
+                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all placeholder:text-slate-400"
                     v-model="form.email"
                     required
                     placeholder="nama@email.com"
@@ -60,7 +60,7 @@ const submit = () => {
                 <input
                     id="password"
                     type="password"
-                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all placeholder:text-slate-400"
+                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all placeholder:text-slate-400"
                     v-model="form.password"
                     required
                     placeholder="Minimal 8 karakter"
@@ -74,7 +74,7 @@ const submit = () => {
                 <input
                     id="password_confirmation"
                     type="password"
-                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all placeholder:text-slate-400"
+                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all placeholder:text-slate-400"
                     v-model="form.password_confirmation"
                     required
                     placeholder="Ulangi kata sandi Anda"
@@ -86,7 +86,7 @@ const submit = () => {
             <div class="pt-4">
                 <button
                     type="submit"
-                    :class="['w-full py-3.5 px-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:-translate-y-0.5 transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900', form.processing ? 'opacity-70 cursor-not-allowed' : '']"
+                    :class="['w-full py-3.5 px-4 bg-gradient-to-r from-brand-500 to-teal-500 text-white font-bold rounded-xl shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 hover:-translate-y-0.5 transition-all focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900', form.processing ? 'opacity-70 cursor-not-allowed' : '']"
                     :disabled="form.processing"
                 >
                     <span v-if="form.processing" class="flex items-center justify-center gap-2">
@@ -102,7 +102,7 @@ const submit = () => {
                     Sudah memiliki akun?
                     <Link
                         :href="route('login')"
-                        class="font-semibold text-emerald-600 hover:text-emerald-500 dark:text-emerald-400 transition-colors ml-1"
+                        class="font-semibold text-brand-600 hover:text-brand-500 dark:text-brand-400 transition-colors ml-1"
                     >
                         Masuk di sini
                     </Link>

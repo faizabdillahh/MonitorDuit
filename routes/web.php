@@ -56,6 +56,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Static Pages
+    Route::inertia('/about', 'Static/About')->name('about');
+    Route::inertia('/privacy', 'Static/Privacy')->name('privacy');
+    Route::inertia('/terms', 'Static/Terms')->name('terms');
+    Route::inertia('/help', 'Static/Help')->name('help');
 });
 
 require __DIR__.'/auth.php';

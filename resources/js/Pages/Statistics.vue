@@ -4,6 +4,7 @@ import { Head, router } from '@inertiajs/vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import { Bar, Doughnut } from 'vue-chartjs'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, ArcElement, Legend } from 'chart.js'
+import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown } from 'lucide-vue-next'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, ArcElement, Legend)
 
@@ -74,13 +75,13 @@ const donutOptions = {
     <!-- Month Navigation -->
     <div class="flex items-center justify-between bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 mb-6">
       <button @click="changeMonth(-1)" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-600 dark:text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        <ChevronLeft class="w-5 h-5 text-slate-600 dark:text-slate-400" />
       </button>
       <div class="text-center">
         <h2 class="text-lg font-bold text-slate-900 dark:text-white">{{ summary.month_name }}</h2>
       </div>
       <button @click="changeMonth(1)" :disabled="isCurrentMonth" :class="['p-2 rounded-xl transition-colors', isCurrentMonth ? 'opacity-30 cursor-not-allowed' : 'hover:bg-slate-100 dark:hover:bg-slate-800']">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-600 dark:text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        <ChevronRight class="w-5 h-5 text-slate-600 dark:text-slate-400" />
       </button>
     </div>
 
@@ -88,16 +89,16 @@ const donutOptions = {
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden">
         <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Total Pengeluaran</p>
-        <p class="text-2xl font-bold text-slate-900 dark:text-white mt-1">{{ formatCurrency(summary.total_amount) }}</p>
+        <p class="text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1">{{ formatCurrency(summary.total_amount) }}</p>
         
         <div v-if="summary.change_percent !== null" class="mt-2 flex items-center gap-1 text-sm">
-          <span v-if="summary.change_percent > 0" class="text-red-500 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd" /></svg>
-            {{ summary.change_percent }}%
+          <span v-if="summary.change_percent > 0" class="text-red-500 flex items-center gap-1">
+            <TrendingUp class="w-4 h-4" />
+            <span class="font-mono">{{ summary.change_percent }}%</span>
           </span>
-          <span v-else-if="summary.change_percent < 0" class="text-emerald-500 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12 13a1 1 0 100 2h5a1 1 0 001-1V9a1 1 0 10-2 0v2.586l-4.293-4.293a1 1 0 00-1.414 0L8 9.586 3.707 5.293a1 1 0 00-1.414 1.414l5 5a1 1 0 001.414 0L11 9.414 14.586 13H12z" clip-rule="evenodd" /></svg>
-            {{ Math.abs(summary.change_percent) }}%
+          <span v-else-if="summary.change_percent < 0" class="text-brand-500 flex items-center gap-1">
+            <TrendingDown class="w-4 h-4" />
+            <span class="font-mono">{{ Math.abs(summary.change_percent) }}%</span>
           </span>
           <span class="text-slate-400">vs bulan lalu</span>
         </div>
@@ -105,8 +106,8 @@ const donutOptions = {
       
       <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden">
         <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Rata-rata Harian</p>
-        <p class="text-2xl font-bold text-slate-900 dark:text-white mt-1">{{ formatCurrency(summary.daily_average) }}</p>
-        <p class="mt-2 text-sm text-slate-400">Berdasarkan {{ summary.total_count }} transaksi</p>
+        <p class="text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1">{{ formatCurrency(summary.daily_average) }}</p>
+        <p class="mt-2 text-sm text-slate-400">Berdasarkan <span class="font-mono">{{ summary.total_count }}</span> transaksi</p>
       </div>
 
       <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden">
@@ -138,7 +139,7 @@ const donutOptions = {
               <span class="w-3 h-3 rounded-full" :style="{ backgroundColor: cat.category_color }"></span>
               <span class="text-sm text-slate-700 dark:text-slate-300">{{ cat.category_name }}</span>
             </div>
-            <span class="text-sm font-semibold text-slate-900 dark:text-white">{{ formatCurrency(cat.total_amount) }}</span>
+            <span class="text-sm font-semibold font-mono text-slate-900 dark:text-white">{{ formatCurrency(cat.total_amount) }}</span>
           </div>
         </div>
       </div>

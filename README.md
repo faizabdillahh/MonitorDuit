@@ -5,7 +5,7 @@
 <h1 align="center">MonitorDuit 💸</h1>
 
 <p align="center">
-  <strong>Aplikasi Pencatatan Keuangan Pribadi Cerdas dengan Integrasi AI Pemindai Struk</strong>
+  <strong>Aplikasi Pencatatan Keuangan Pribadi Cerdas dengan Integrasi AI Pemindai Struk (Versi 1.1)</strong>
 </p>
 
 ---
@@ -23,9 +23,10 @@ Aplikasi ini dibangun menggunakan arsitektur *monolith* modern (*Laravel + Vue.j
 - 🤖 **AI Receipt Scanner:** Menggunakan model `gemini-2.5-flash` untuk membaca teks pada struk belanja dan mengubahnya menjadi data transaksi terstruktur.
 - 📊 **Dashboard & Statistik:** Visualisasi pengeluaran bulanan dan harian menggunakan grafik interaktif (Bar & Doughnut Chart) yang akurat.
 - 🌓 **Smart Theme System:** Dukungan penuh untuk Mode Terang (*Light Mode*) dan Mode Gelap (*Dark Mode*) dengan preferensi yang tersimpan di basis data pengguna.
-- 🏷️ **Manajemen Kategori:** Personalisasi kategori pengeluaran dengan warna dan ikon kustom.
+- 🏷️ **Kategori Kustom & Emoji Picker:** Personalisasi kategori pengeluaran secara *full custom* lengkap dengan pilihan warna dan *icon/emoji picker* yang interaktif.
 - 📥 **Export Laporan:** Mengunduh riwayat transaksi ke dalam format *Excel (.xlsx)* yang diformat secara profesional.
 - 🔐 **Autentikasi Aman:** Sistem pendaftaran, masuk, verifikasi email, dan pengaturan profil bawaan yang diperkuat oleh sistem keamanan Laravel.
+- 📄 **Halaman Informasi (Static Pages):** Menyediakan halaman Tentang Kami, Pusat Bantuan, Kebijakan Privasi, dan Syarat & Ketentuan yang terintegrasi penuh melalui arsitektur SPA Inertia.
 
 ---
 
@@ -151,4 +152,6 @@ Seluruh panduan terkait tipografi (Plus Jakarta Sans), palet warna (Emerald & Sl
 
 ## 📄 Lisensi
 
-Proyek ini merupakan proyek sumber terbuka di bawah [MIT license](https://opensource.org/licenses/MIT). Silakan gunakan, pelajari, dan kembangkan sesuka Anda!
+**Proprietary / Hak Cipta Dilindungi**
+
+Proyek ini adalah perangkat lunak berpemilik (*proprietary software*). Seluruh kode sumber, desain, dan aset yang ada di dalam repositori ini dilindungi oleh undang-undang hak cipta. Dilarang keras untuk menyalin, mendistribusikan, memodifikasi, atau menggunakan sebagian maupun seluruh bagian dari kode ini tanpa izin tertulis yang sah dari pengembang/pemilik (MonitorDuit).

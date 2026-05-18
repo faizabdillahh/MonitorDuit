@@ -1,7 +1,33 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  --color-brand: #10b981;
-  --color-brand-dark: #059669;
-  --font-sans: 'Plus Jakarta Sans', sans-serif;
+    /* Brand Colors */
+    --color-brand-50:  #ecfdf5;
+    --color-brand-100: #d1fae5;
+    --color-brand-200: #a7f3d0;
+    --color-brand-300: #6ee7b7;
+    --color-brand-400: #34d399;
+    --color-brand-500: #10b981;
+    --color-brand-600: #059669;
+    --color-brand-700: #047857;
+    --color-brand-800: #065f46;
+    --color-brand-900: #064e3b;
+
+    /* Typography */
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+    /* Border Radius */
+    --radius-sm:   6px;
+    --radius-md:   8px;
+    --radius-lg:   12px;
+    --radius-xl:   16px;
+    --radius-2xl:  20px;
+
+    /* Shadows */
+    --shadow-brand: 0 4px 14px rgba(16, 185, 129, 0.25);
+    --shadow-brand-hover: 0 6px 20px rgba(16, 185, 129, 0.35);
 }

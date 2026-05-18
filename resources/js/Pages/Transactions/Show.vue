@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { Link, Head, useForm } from '@inertiajs/vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
+import { ChevronLeft, Camera, ZoomIn, X } from 'lucide-vue-next'
 
 const props = defineProps({
   transaction: Object,
@@ -54,8 +55,8 @@ function closeModal() {
   <AppLayout title="Detail Transaksi">
     
     <div class="mb-6 flex items-center justify-between">
-      <Link :href="route('transactions.index')" class="text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-emerald-400 font-medium flex items-center gap-1">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+      <Link :href="route('transactions.index')" class="text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 font-medium flex items-center gap-1">
+        <ChevronLeft class="w-4 h-4" />
         Kembali
       </Link>
       
@@ -77,36 +78,36 @@ function closeModal() {
         <form v-if="isEditing" @submit.prevent="submit" class="space-y-4">
           <div>
             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Total Harga <span class="text-red-500">*</span></label>
-            <input v-model="form.total_amount" type="number" step="0.01" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" required />
+            <input v-model="form.total_amount" type="number" step="0.01" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500" required />
           </div>
 
           <div>
             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nama Merchant</label>
-            <input v-model="form.merchant_name" type="text" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" />
+            <input v-model="form.merchant_name" type="text" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500" />
           </div>
 
           <div>
             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tanggal Transaksi <span class="text-red-500">*</span></label>
-            <input v-model="form.transaction_date" type="date" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" required />
+            <input v-model="form.transaction_date" type="date" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500" required />
           </div>
 
           <div>
             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Kategori <span class="text-red-500">*</span></label>
-            <select v-model="form.category_id" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" required>
+            <select v-model="form.category_id" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500" required>
               <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.icon }} {{ cat.name }}</option>
             </select>
           </div>
 
           <div>
             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Catatan</label>
-            <textarea v-model="form.notes" rows="2" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+            <textarea v-model="form.notes" rows="2" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500"></textarea>
           </div>
 
           <div class="pt-4 flex justify-end gap-3">
             <button type="button" @click="isEditing = false" class="px-5 py-2.5 rounded-xl font-medium text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700">
               Batal
             </button>
-            <button type="submit" :disabled="form.processing" class="px-6 py-2.5 rounded-xl font-bold text-white bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50">
+            <button type="submit" :disabled="form.processing" class="px-6 py-2.5 rounded-xl font-bold text-white bg-brand-500 hover:bg-brand-600 disabled:opacity-50">
               Simpan Perubahan
             </button>
           </div>
@@ -116,10 +117,10 @@ function closeModal() {
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Pengeluaran</p>
-              <p class="text-3xl font-bold text-slate-900 dark:text-white mt-1">{{ formatCurrency(transaction.total_amount) }}</p>
+              <p class="text-3xl font-bold font-mono text-slate-900 dark:text-white mt-1">{{ formatCurrency(transaction.total_amount) }}</p>
             </div>
             <div class="text-right">
-              <span v-if="transaction.source === 'ai'" class="px-2 py-1 text-xs font-bold rounded-md bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400">Diisi AI</span>
+              <span v-if="transaction.source === 'ai'" class="px-2 py-1 text-xs font-bold rounded-md bg-brand-100 text-brand-700 dark:bg-brand-500/20 dark:text-brand-400">Diisi AI</span>
               <span v-else class="px-2 py-1 text-xs font-bold rounded-md bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">Manual</span>
             </div>
           </div>
@@ -161,13 +162,15 @@ function closeModal() {
           <div class="relative w-full rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 group cursor-pointer" @click="showLightbox = true">
             <img :src="receiptUrl" class="w-full object-contain max-h-[500px]" alt="Foto struk" />
             <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-              <span class="opacity-0 group-hover:opacity-100 text-white font-medium bg-black/50 px-3 py-1.5 rounded-lg backdrop-blur-sm transition-opacity">🔍 Perbesar</span>
+              <span class="flex items-center gap-2 opacity-0 group-hover:opacity-100 text-white font-medium bg-black/50 px-3 py-1.5 rounded-lg backdrop-blur-sm transition-opacity">
+                <ZoomIn class="w-4 h-4" /> Perbesar
+              </span>
             </div>
           </div>
         </div>
         
         <div v-else class="h-[300px] flex flex-col items-center justify-center text-center bg-slate-50 dark:bg-slate-800 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
-          <div class="text-4xl text-slate-300 dark:text-slate-600 mb-2">📸</div>
+          <Camera class="w-12 h-12 text-slate-300 dark:text-slate-600 mb-3" />
           <p class="text-slate-500 dark:text-slate-400 font-medium">Tidak ada foto struk</p>
           <p class="text-xs text-slate-400 mt-1">Transaksi ini dicatat secara manual</p>
         </div>
@@ -177,11 +180,11 @@ function closeModal() {
     <!-- Lightbox -->
     <Teleport to="body">
       <div v-if="showLightbox" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4" @click="showLightbox = false">
-        <button class="absolute top-4 right-4 text-white hover:text-emerald-400 p-2" @click="showLightbox = false">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <button class="absolute top-4 right-4 text-white hover:text-brand-400 p-2" @click="showLightbox = false">
+          <X class="w-8 h-8" />
         </button>
         <img :src="receiptUrl" class="max-w-full max-h-[90vh] object-contain rounded-lg" @click.stop />
-        <a :href="receiptUrl" download class="absolute bottom-6 right-6 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium shadow-lg" @click.stop>
+        <a :href="receiptUrl" download class="absolute bottom-6 right-6 px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-medium shadow-lg" @click.stop>
           Download
         </a>
       </div>
