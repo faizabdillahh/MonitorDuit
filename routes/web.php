@@ -1,0 +1,61 @@
+<?php
+
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReceiptController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\StatisticsController;
+use App\Http\Controllers\TransactionController;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
+Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+    ]);
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Transactions
+    Route::resource('transactions', TransactionController::class)
+        ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
+
+    // Receipt scan
+    Route::post('/receipts/scan', [ReceiptController::class, 'scan'])
+        ->middleware('throttle:50,1440')
+        ->name('receipts.scan');
+
+    Route::get('/receipts/{transaction}/image', [ReceiptController::class, 'image'])
+        ->name('receipts.image');
+
+    // Statistics
+    Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics');
+
+    // Export
+    Route::get('/export', [ExportController::class, 'download'])->name('export');
+
+    // Categories
+    Route::resource('categories', CategoryController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
+
+    // Settings
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
+
+    // Profile (from Breeze)
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';

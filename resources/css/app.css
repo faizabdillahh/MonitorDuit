@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@theme {
+  --color-brand: #10b981;
+  --color-brand-dark: #059669;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+}
