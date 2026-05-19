@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
+import ApplicationLogo from '@/Components/ApplicationLogo.vue'
 import { useTheme } from '@/Composables/useTheme'
 import { useToast } from '@/Composables/useToast'
 import {
@@ -86,11 +87,8 @@ function isActive(routeName) {
         <div class="flex items-center justify-between h-[60px]">
 
           <!-- Logo -->
-          <Link :href="route('dashboard')" class="flex items-center gap-2.5">
-            <div class="w-8 h-8 bg-gradient-to-br from-brand-500 to-emerald-600 rounded-xl flex items-center justify-center">
-              <span class="text-white font-bold text-xs">M</span>
-            </div>
-            <span class="font-bold text-xl text-gray-900 dark:text-white tracking-tight hidden sm:block" style="font-family: 'Plus Jakarta Sans', sans-serif;">MonitorDuit</span>
+          <Link :href="route('dashboard')" class="flex items-center">
+            <ApplicationLogo class="h-8 w-auto" />
           </Link>
 
           <!-- Desktop Nav (center, Instagram-style) -->

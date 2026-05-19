@@ -1,5 +1,6 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 
 </script>
 
@@ -9,11 +10,8 @@ import { Link } from '@inertiajs/vue3';
     >
         <div class="w-full max-w-sm">
             <div class="flex justify-center mb-8">
-                <Link href="/" class="flex items-center gap-2 group">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center shadow-sm" style="background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);">
-                        <span class="text-white font-bold text-lg">M</span>
-                    </div>
-                    <span class="font-bold text-2xl tracking-tight text-gray-900 dark:text-white" style="font-family: 'Plus Jakarta Sans', sans-serif;">MonitorDuit</span>
+                <Link href="/" class="flex items-center">
+                    <ApplicationLogo class="h-10 w-auto" />
                 </Link>
             </div>
 

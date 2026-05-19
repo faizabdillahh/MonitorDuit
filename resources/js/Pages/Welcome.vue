@@ -1,5 +1,6 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Camera, BarChart2, Moon } from 'lucide-vue-next';
 
 defineProps({
@@ -15,11 +16,8 @@ defineProps({
         <!-- Navigation -->
         <header class="sticky top-0 z-40 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
             <div class="max-w-5xl mx-auto px-4 h-[60px] flex justify-between items-center">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-full flex items-center justify-center shadow-sm" style="background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);">
-                        <span class="text-white font-bold text-xs">M</span>
-                    </div>
-                    <span class="font-bold text-xl tracking-tight hidden sm:block" style="font-family: 'Plus Jakarta Sans', sans-serif;">MonitorDuit</span>
+                <div class="flex items-center">
+                    <ApplicationLogo class="h-8 w-auto" />
                 </div>
                 <div v-if="canLogin" class="flex items-center gap-3">
                     <template v-if="$page.props.auth.user">
@@ -116,11 +114,8 @@ defineProps({
         <footer class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 mt-12">
             <div class="max-w-5xl mx-auto px-4 py-8">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div class="flex items-center gap-2">
-                        <div class="w-6 h-6 rounded-full flex items-center justify-center shadow-sm" style="background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);">
-                            <span class="text-white font-bold text-[10px]">M</span>
-                        </div>
-                        <span class="text-gray-900 dark:text-white font-semibold text-sm">MonitorDuit</span>
+                    <div class="flex items-center">
+                        <ApplicationLogo class="h-6 w-auto grayscale opacity-80" />
                     </div>
                     
                     <div class="flex flex-wrap gap-4 text-xs font-medium text-gray-500 dark:text-gray-400">
@@ -132,7 +127,7 @@ defineProps({
                 </div>
                 <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center text-xs text-gray-400">
                     <p>&copy; {{ new Date().getFullYear() }} MonitorDuit.</p>
-                    <p>Versi 1.2.0</p>
+                    <p>Versi 1.2.1</p>
                 </div>
             </div>
         </footer>
