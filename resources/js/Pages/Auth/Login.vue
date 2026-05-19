@@ -29,38 +29,38 @@ const submit = () => {
     <GuestLayout>
         <Head title="Log in" />
 
-        <div class="mb-8 text-center">
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Selamat Datang Kembali</h2>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">Masuk ke akun Anda untuk mencatat pengeluaran.</p>
+        <div class="mb-6 text-center">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Selamat Datang</h2>
+            <p class="text-sm text-gray-500 mt-1">Masuk untuk melihat catatan Anda.</p>
         </div>
 
-        <div v-if="status" class="mb-4 text-sm font-medium text-brand-600 bg-brand-50 dark:bg-brand-500/10 p-3 rounded-xl border border-brand-200 dark:border-brand-500/20 text-center">
+        <div v-if="status" class="mb-4 text-sm font-medium text-brand-600 bg-brand-50 dark:bg-brand-500/10 p-3 rounded-lg text-center">
             {{ status }}
         </div>
 
-        <form @submit.prevent="submit" class="space-y-5">
+        <form @submit.prevent="submit" class="space-y-4">
             <div>
-                <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Alamat Email</label>
+                <label for="email" class="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Email</label>
                 <input
                     id="email"
                     type="email"
-                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all placeholder:text-slate-400"
+                    class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500 transition-all placeholder:text-gray-400"
                     v-model="form.email"
                     required
                     autofocus
                     placeholder="nama@email.com"
                     autocomplete="username"
                 />
-                <p v-if="form.errors.email" class="text-red-500 text-xs mt-1.5">{{ form.errors.email }}</p>
+                <p v-if="form.errors.email" class="text-red-500 text-xs mt-1">{{ form.errors.email }}</p>
             </div>
 
             <div>
                 <div class="flex items-center justify-between mb-1.5">
-                    <label for="password" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Kata Sandi</label>
+                    <label for="password" class="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Kata Sandi</label>
                     <Link
                         v-if="canResetPassword"
                         :href="route('password.request')"
-                        class="text-xs font-semibold text-brand-600 hover:text-brand-500 dark:text-brand-400 transition-colors"
+                        class="text-xs font-medium text-brand-600 hover:text-brand-700 transition-colors"
                     >
                         Lupa sandi?
                     </Link>
@@ -68,20 +68,20 @@ const submit = () => {
                 <input
                     id="password"
                     type="password"
-                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all placeholder:text-slate-400"
+                    class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500 transition-all placeholder:text-gray-400"
                     v-model="form.password"
                     required
                     placeholder="••••••••"
                     autocomplete="current-password"
                 />
-                <p v-if="form.errors.password" class="text-red-500 text-xs mt-1.5">{{ form.errors.password }}</p>
+                <p v-if="form.errors.password" class="text-red-500 text-xs mt-1">{{ form.errors.password }}</p>
             </div>
 
             <div class="flex items-center">
                 <label class="flex items-center gap-2 cursor-pointer group">
-                    <Checkbox name="remember" v-model:checked="form.remember" class="rounded border-slate-300 dark:border-slate-700 text-brand-500 focus:ring-brand-500" />
-                    <span class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
-                        Ingat saya di perangkat ini
+                    <Checkbox name="remember" v-model:checked="form.remember" class="rounded border-gray-300 dark:border-gray-700 text-brand-600 focus:ring-brand-600 w-4 h-4" />
+                    <span class="text-sm text-gray-600 dark:text-gray-400">
+                        Ingat saya
                     </span>
                 </label>
             </div>
@@ -89,28 +89,20 @@ const submit = () => {
             <div class="pt-2">
                 <button
                     type="submit"
-                    :class="['w-full py-3.5 px-4 bg-gradient-to-r from-brand-500 to-teal-500 text-white font-bold rounded-xl shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 hover:-translate-y-0.5 transition-all focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900', form.processing ? 'opacity-70 cursor-not-allowed' : '']"
+                    :class="['w-full py-2.5 px-4 bg-brand-600 text-white font-semibold text-sm rounded-lg hover:bg-brand-700 transition-colors', form.processing ? 'opacity-70 cursor-not-allowed' : '']"
                     :disabled="form.processing"
                 >
-                    <span v-if="form.processing" class="flex items-center justify-center gap-2">
-                        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        Memproses...
-                    </span>
-                    <span v-else>Masuk ke Dashboard</span>
+                    <span v-if="form.processing">Memproses...</span>
+                    <span v-else>Masuk</span>
                 </button>
             </div>
-
-            <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800 text-center">
-                <p class="text-sm text-slate-600 dark:text-slate-400">
-                    Belum punya akun?
-                    <Link
-                        :href="route('register')"
-                        class="font-semibold text-brand-600 hover:text-brand-500 dark:text-brand-400 transition-colors ml-1"
-                    >
-                        Daftar sekarang
-                    </Link>
-                </p>
-            </div>
+            
+            <p class="text-center text-sm text-gray-500 mt-6 pt-4 border-t border-gray-100 dark:border-gray-800">
+                Belum punya akun?
+                <Link :href="route('register')" class="font-semibold text-brand-600 hover:text-brand-700 ml-1">
+                    Daftar
+                </Link>
+            </p>
         </form>
     </GuestLayout>
 </template>

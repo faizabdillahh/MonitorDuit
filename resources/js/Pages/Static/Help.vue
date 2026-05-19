@@ -7,7 +7,7 @@ import { Mail, MessageCircle, MapPin } from 'lucide-vue-next'
 <template>
   <Head title="Bantuan & Kontak" />
   <AppLayout title="Bantuan & Kontak">
-    <div class="max-w-4xl mx-auto space-y-6">
+    <div class="w-full space-y-6">
       
       <!-- Bantuan -->
       <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm">

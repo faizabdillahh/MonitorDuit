@@ -1,18 +1,11 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { Link, usePage, router } from '@inertiajs/vue3'
+import { ref, computed } from 'vue'
+import { Link, usePage } from '@inertiajs/vue3'
 import { useTheme } from '@/Composables/useTheme'
 import { useToast } from '@/Composables/useToast'
 import {
-  LayoutDashboard,
-  ReceiptText,
-  TrendingUp,
-  Settings,
-  ScanLine,
-  Sun,
-  Moon,
-  Menu,
-  ChevronDown
+  LayoutDashboard, ReceiptText, TrendingUp, Wallet, Repeat,
+  Settings, Plus, Sun, Moon, Bell, Search, User, ChevronDown, X
 } from 'lucide-vue-next'
 
 const props = defineProps({
@@ -24,14 +17,26 @@ const { toasts } = useToast()
 const page = usePage()
 const user = computed(() => page.props.auth?.user)
 const flash = computed(() => page.props.flash)
-const mobileMenuOpen = ref(false)
 const userMenuOpen = ref(false)
+const unreadCount = computed(() => page.props.unreadNotifications || 0)
 
-const navLinks = [
-  { name: 'Dashboard', route: 'dashboard', icon: LayoutDashboard },
+// Bottom nav (Instagram-style: 5 items max)
+const bottomNavLinks = [
+  { name: 'Home', route: 'dashboard', icon: LayoutDashboard },
   { name: 'Transaksi', route: 'transactions.index', icon: ReceiptText },
+  { name: 'Budget', route: 'budgets.index', icon: Wallet },
   { name: 'Statistik', route: 'statistics', icon: TrendingUp },
-  { name: 'Pengaturan', route: 'settings', icon: Settings },
+  { name: 'Profil', route: 'profile.edit', icon: User },
+]
+
+// Desktop nav (full)
+const desktopNavLinks = [
+  { name: 'Dashboard', route: 'dashboard' },
+  { name: 'Transaksi', route: 'transactions.index' },
+  { name: 'Budget', route: 'budgets.index' },
+  { name: 'Recurring', route: 'recurring.index' },
+  { name: 'Statistik', route: 'statistics' },
+  { name: 'Pengaturan', route: 'settings' },
 ]
 
 function isActive(routeName) {
@@ -40,23 +45,24 @@ function isActive(routeName) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
+  <div class="min-h-screen bg-[#fafafa] dark:bg-black text-gray-900 dark:text-gray-100 font-sans">
+
     <!-- Toast Notifications -->
-    <div class="fixed top-4 right-4 z-50 space-y-2">
+    <div class="fixed top-4 left-1/2 -translate-x-1/2 z-[200] space-y-2 w-full max-w-sm px-4">
       <TransitionGroup
         enter-active-class="transition duration-300 ease-out"
-        enter-from-class="translate-x-full opacity-0"
-        enter-to-class="translate-x-0 opacity-100"
+        enter-from-class="translate-y-[-12px] opacity-0 scale-95"
+        enter-to-class="translate-y-0 opacity-100 scale-100"
         leave-active-class="transition duration-200 ease-in"
-        leave-from-class="translate-x-0 opacity-100"
-        leave-to-class="translate-x-full opacity-0"
+        leave-from-class="translate-y-0 opacity-100"
+        leave-to-class="translate-y-[-12px] opacity-0"
       >
         <div
           v-for="toast in toasts"
           :key="toast.id"
           :class="[
-            'px-4 py-3 rounded-xl shadow-lg text-white text-sm font-medium min-w-[280px]',
-            toast.type === 'success' ? 'bg-brand-500' : '',
+            'px-4 py-3 rounded-xl text-white text-sm font-medium text-center shadow-lg',
+            toast.type === 'success' ? 'bg-gray-900 dark:bg-white dark:text-gray-900' : '',
             toast.type === 'error' ? 'bg-red-500' : '',
             toast.type === 'info' ? 'bg-blue-500' : '',
           ]"
@@ -65,76 +71,89 @@ function isActive(routeName) {
         </div>
       </TransitionGroup>
 
-      <!-- Flash Messages -->
-      <div v-if="flash?.success" class="px-4 py-3 rounded-xl shadow-lg bg-brand-500 text-white text-sm font-medium min-w-[280px]">
+      <div v-if="flash?.success" class="px-4 py-3 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium text-center shadow-lg">
         {{ flash.success }}
       </div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <!-- Logo & Nav Links -->
-          <div class="flex items-center gap-8">
-            <Link :href="route('dashboard')" class="flex items-center gap-2">
-              <div class="w-9 h-9 bg-gradient-to-br from-brand-400 to-brand-600 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/25">
-                <span class="text-white font-bold text-sm">M</span>
-              </div>
-              <span class="font-bold text-lg text-slate-900 dark:text-white hidden sm:block">MonitorDuit</span>
-            </Link>
+    <!-- Top Bar (Instagram-style) -->
+    <header class="sticky top-0 z-40 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800">
+      <div class="max-w-[935px] mx-auto px-4">
+        <div class="flex items-center justify-between h-[60px]">
 
-            <!-- Desktop Nav -->
-            <div class="hidden md:flex items-center gap-1">
-              <Link
-                v-for="link in navLinks"
-                :key="link.route"
-                :href="route(link.route)"
-                :class="[
-                  'px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200',
-                  isActive(link.route)
-                    ? 'bg-brand-50 dark:bg-brand-500/10 text-brand-700 dark:text-brand-400'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white',
-                ]"
-              >
-                <component :is="link.icon" class="w-4 h-4 mr-1.5" />
-                {{ link.name }}
-              </Link>
+          <!-- Logo -->
+          <Link :href="route('dashboard')" class="flex items-center gap-2.5">
+            <div class="w-8 h-8 bg-gradient-to-br from-brand-500 to-emerald-600 rounded-xl flex items-center justify-center">
+              <span class="text-white font-bold text-xs">M</span>
             </div>
-          </div>
+            <span class="font-bold text-xl text-gray-900 dark:text-white tracking-tight hidden sm:block" style="font-family: 'Plus Jakarta Sans', sans-serif;">MonitorDuit</span>
+          </Link>
 
-          <!-- Right Side -->
-          <div class="flex items-center gap-3">
-            <!-- Scan CTA -->
+          <!-- Desktop Nav (center, Instagram-style) -->
+          <nav class="hidden md:flex items-center gap-1">
+            <Link
+              v-for="link in desktopNavLinks"
+              :key="link.route"
+              :href="route(link.route)"
+              :class="[
+                'px-3 py-1.5 rounded-lg text-[13px] font-medium transition-colors',
+                isActive(link.route)
+                  ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800'
+                  : 'text-gray-500 hover:text-gray-900 dark:hover:text-white',
+              ]"
+            >
+              {{ link.name }}
+            </Link>
+          </nav>
+
+          <!-- Right icons -->
+          <div class="flex items-center gap-1">
+            <!-- Add New (Instagram "+") -->
             <Link
               :href="route('transactions.create')"
-              class="hidden sm:flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white rounded-xl text-sm font-semibold shadow-lg shadow-brand-500/25 transition-all duration-200 hover:shadow-brand-500/40 hover:-translate-y-0.5 active:translate-y-0"
+              class="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              title="Tambah transaksi"
             >
-              <ScanLine class="w-4 h-4" />
-              Scan Struk
+              <Plus class="w-[22px] h-[22px]" />
             </Link>
 
-            <!-- Dark Mode Toggle -->
+            <!-- Notifications (Instagram heart) -->
+            <Link
+              :href="route('notifications.index')"
+              class="relative p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              title="Notifikasi"
+            >
+              <Bell class="w-[22px] h-[22px]" />
+              <span
+                v-if="unreadCount > 0"
+                class="absolute top-1 right-1 min-w-[16px] h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1"
+              >
+                {{ unreadCount > 9 ? '9+' : unreadCount }}
+              </span>
+            </Link>
+
+            <!-- Theme toggle -->
             <button
               @click="toggle"
-              class="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-              :title="isDark ? 'Mode Terang' : 'Mode Gelap'"
+              class="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors hidden sm:block"
             >
-              <Moon v-if="isDark" class="w-5 h-5" />
-              <Sun v-else class="w-5 h-5" />
+              <Moon v-if="isDark" class="w-[20px] h-[20px]" />
+              <Sun v-else class="w-[20px] h-[20px]" />
             </button>
 
-            <!-- User Menu -->
-            <div class="relative">
+            <!-- User Avatar (Instagram profile pic) -->
+            <div class="relative ml-1">
               <button
                 @click="userMenuOpen = !userMenuOpen"
-                class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                :class="[
+                  'w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold transition-all',
+                  isActive('profile.edit')
+                    ? 'ring-2 ring-gray-900 dark:ring-white ring-offset-2 ring-offset-white dark:ring-offset-gray-950'
+                    : 'hover:opacity-80',
+                ]"
+                style="background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);"
               >
-                <div class="w-8 h-8 bg-gradient-to-br from-brand-400 to-teal-500 rounded-lg flex items-center justify-center">
-                  <span class="text-white text-sm font-bold">{{ user?.name?.[0]?.toUpperCase() }}</span>
-                </div>
-                <span class="hidden md:block text-sm font-medium text-slate-700 dark:text-slate-300">{{ user?.name }}</span>
-                <ChevronDown class="w-4 h-4 text-slate-400" />
+                {{ user?.name?.[0]?.toUpperCase() }}
               </button>
 
               <Transition
@@ -145,100 +164,102 @@ function isActive(routeName) {
                 leave-from-class="opacity-100 scale-100"
                 leave-to-class="opacity-0 scale-95"
               >
-                <div v-if="userMenuOpen" class="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 py-1 z-50">
-                  <Link :href="route('profile.edit')" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700" @click="userMenuOpen = false">
-                    Profil
+                <div v-if="userMenuOpen" class="absolute right-0 mt-2 w-52 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 py-1 z-50">
+                  <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+                    <p class="text-sm font-semibold text-gray-900 dark:text-white truncate">{{ user?.name }}</p>
+                    <p class="text-xs text-gray-400 truncate mt-0.5">{{ user?.email }}</p>
+                  </div>
+                  <Link :href="route('profile.edit')" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800" @click="userMenuOpen = false">
+                    <User class="w-4 h-4" /> Profil
                   </Link>
-                  <Link :href="route('settings')" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700" @click="userMenuOpen = false">
-                    Pengaturan
+                  <Link :href="route('settings')" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800" @click="userMenuOpen = false">
+                    <Settings class="w-4 h-4" /> Pengaturan
                   </Link>
-                  <hr class="my-1 border-slate-200 dark:border-slate-700">
-                  <Link :href="route('logout')" method="post" as="button" class="block w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10">
+                  <Link :href="route('recurring.index')" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 md:hidden" @click="userMenuOpen = false">
+                    <Repeat class="w-4 h-4" /> Recurring
+                  </Link>
+                  <button @click="toggle(); userMenuOpen = false" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 sm:hidden text-left">
+                    <Moon v-if="isDark" class="w-4 h-4" />
+                    <Sun v-else class="w-4 h-4" />
+                    {{ isDark ? 'Mode Terang' : 'Mode Gelap' }}
+                  </button>
+                  <hr class="my-1 border-gray-100 dark:border-gray-800">
+                  <Link :href="route('logout')" method="post" as="button" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10">
                     Keluar
                   </Link>
                 </div>
               </Transition>
             </div>
-
-            <!-- Mobile Menu Toggle -->
-            <button
-              @click="mobileMenuOpen = !mobileMenuOpen"
-              class="md:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
-            >
-              <Menu class="w-5 h-5" />
-            </button>
           </div>
         </div>
       </div>
-
-      <!-- Mobile Nav -->
-      <Transition
-        enter-active-class="transition ease-out duration-200"
-        enter-from-class="-translate-y-2 opacity-0"
-        enter-to-class="translate-y-0 opacity-100"
-        leave-active-class="transition ease-in duration-150"
-        leave-from-class="translate-y-0 opacity-100"
-        leave-to-class="-translate-y-2 opacity-0"
-      >
-        <div v-if="mobileMenuOpen" class="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pb-3 pt-2 px-4 space-y-1">
-          <Link
-            v-for="link in navLinks"
-            :key="link.route"
-            :href="route(link.route)"
-            :class="[
-              'block px-3 py-2.5 rounded-lg text-sm font-medium',
-              isActive(link.route)
-                ? 'bg-brand-50 dark:bg-brand-500/10 text-brand-700 dark:text-brand-400'
-                : 'text-slate-600 dark:text-slate-400',
-            ]"
-            @click="mobileMenuOpen = false"
-          >
-            <component :is="link.icon" class="w-5 h-5 mr-3" />
-            {{ link.name }}
-          </Link>
-        </div>
-      </Transition>
-    </nav>
+    </header>
 
     <!-- Page Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 min-h-[calc(100vh-16rem)]">
+    <main class="max-w-[935px] mx-auto px-4 py-5 pb-24 md:pb-8 min-h-[calc(100vh-60px)]">
       <slot />
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-auto">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="md:flex md:items-center md:justify-between">
-          <div class="flex justify-center md:justify-start items-center gap-2 mb-4 md:mb-0">
-            <div class="w-6 h-6 bg-gradient-to-br from-brand-400 to-brand-600 rounded flex items-center justify-center shadow-sm">
-              <span class="text-white font-bold text-[10px]">M</span>
-            </div>
-            <span class="text-slate-900 dark:text-white font-semibold text-sm">MonitorDuit</span>
-          </div>
-          
-          <div class="flex justify-center gap-6 text-sm text-slate-500 dark:text-slate-400 flex-wrap">
-            <Link :href="route('about')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Tentang Kami</Link>
-            <Link :href="route('help')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Bantuan</Link>
-            <Link :href="route('privacy')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Privasi</Link>
-            <Link :href="route('terms')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Syarat & Ketentuan</Link>
-          </div>
-        </div>
-        <div class="mt-8 border-t border-slate-100 dark:border-slate-800/50 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 dark:text-slate-500">
-          <p>&copy; {{ new Date().getFullYear() }} MonitorDuit. Seluruh hak cipta dilindungi.</p>
-          <p class="mt-2 md:mt-0 font-medium">Versi 1.1</p>
+    <!-- Footer (desktop only) -->
+    <footer class="hidden md:block border-t border-gray-200 dark:border-gray-800">
+      <div class="max-w-[935px] mx-auto px-4 py-6">
+        <div class="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-gray-400">
+          <Link :href="route('about')" class="hover:text-gray-600 dark:hover:text-gray-300">Tentang</Link>
+          <Link :href="route('help')" class="hover:text-gray-600 dark:hover:text-gray-300">Bantuan</Link>
+          <Link :href="route('privacy')" class="hover:text-gray-600 dark:hover:text-gray-300">Privasi</Link>
+          <Link :href="route('terms')" class="hover:text-gray-600 dark:hover:text-gray-300">Ketentuan</Link>
+          <span>© {{ new Date().getFullYear() }} MonitorDuit</span>
         </div>
       </div>
     </footer>
 
-    <!-- Mobile FAB: Scan Struk -->
-    <Link
-      :href="route('transactions.create')"
-      class="sm:hidden fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-brand-500 to-brand-600 text-white rounded-2xl shadow-xl shadow-brand-500/30 flex items-center justify-center z-50 hover:shadow-brand-500/50 active:scale-95 transition-all"
-    >
-      <ScanLine class="w-6 h-6" />
-    </Link>
+    <!-- Bottom Navigation Bar (Instagram-style, mobile only) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 safe-area-bottom">
+      <div class="flex items-center justify-around h-[50px] max-w-lg mx-auto">
+        <Link
+          v-for="link in bottomNavLinks"
+          :key="link.route"
+          :href="route(link.route)"
+          :class="[
+            'flex flex-col items-center justify-center flex-1 h-full transition-colors',
+            isActive(link.route)
+              ? 'text-gray-900 dark:text-white'
+              : 'text-gray-400 dark:text-gray-500',
+          ]"
+        >
+          <!-- Special avatar for Profile tab -->
+          <template v-if="link.route === 'profile.edit'">
+            <div
+              :class="[
+                'w-6 h-6 rounded-full flex items-center justify-center text-white text-[9px] font-bold',
+                isActive(link.route) ? 'ring-[1.5px] ring-gray-900 dark:ring-white ring-offset-1 ring-offset-white dark:ring-offset-gray-950' : '',
+              ]"
+              style="background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);"
+            >
+              {{ user?.name?.[0]?.toUpperCase() }}
+            </div>
+          </template>
+          <template v-else>
+            <component
+              :is="link.icon"
+              :class="[
+                'transition-all',
+                isActive(link.route) ? 'w-[26px] h-[26px]' : 'w-6 h-6',
+              ]"
+              :stroke-width="isActive(link.route) ? 2.5 : 1.5"
+            />
+          </template>
+        </Link>
+      </div>
+    </nav>
 
-    <!-- Click outside to close menus -->
-    <div v-if="userMenuOpen || mobileMenuOpen" class="fixed inset-0 z-30" @click="userMenuOpen = false; mobileMenuOpen = false"></div>
+    <!-- Click outside overlay -->
+    <div v-if="userMenuOpen" class="fixed inset-0 z-30" @click="userMenuOpen = false"></div>
   </div>
 </template>
+
+<style scoped>
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+</style>

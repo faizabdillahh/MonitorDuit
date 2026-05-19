@@ -18,96 +18,88 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Daftar Akun" />
+        <Head title="Register" />
 
-        <div class="mb-8 text-center">
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Buat Akun Baru</h2>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">Mulai pantau pengeluaran Anda dengan bantuan AI.</p>
+        <div class="mb-6 text-center">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Daftar Akun</h2>
+            <p class="text-sm text-gray-500 mt-1">Mulai kelola keuangan Anda.</p>
         </div>
 
-        <form @submit.prevent="submit" class="space-y-5">
+        <form @submit.prevent="submit" class="space-y-4">
             <div>
-                <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Nama Lengkap</label>
+                <label for="name" class="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Nama Lengkap</label>
                 <input
                     id="name"
                     type="text"
-                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all placeholder:text-slate-400"
+                    class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500 transition-all placeholder:text-gray-400"
                     v-model="form.name"
                     required
                     autofocus
-                    placeholder="Budi Santoso"
                     autocomplete="name"
+                    placeholder="Nama Lengkap"
                 />
-                <p v-if="form.errors.name" class="text-red-500 text-xs mt-1.5">{{ form.errors.name }}</p>
+                <p v-if="form.errors.name" class="text-red-500 text-xs mt-1">{{ form.errors.name }}</p>
             </div>
 
             <div>
-                <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Alamat Email</label>
+                <label for="email" class="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Email</label>
                 <input
                     id="email"
                     type="email"
-                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all placeholder:text-slate-400"
+                    class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500 transition-all placeholder:text-gray-400"
                     v-model="form.email"
                     required
-                    placeholder="nama@email.com"
                     autocomplete="username"
+                    placeholder="nama@email.com"
                 />
-                <p v-if="form.errors.email" class="text-red-500 text-xs mt-1.5">{{ form.errors.email }}</p>
+                <p v-if="form.errors.email" class="text-red-500 text-xs mt-1">{{ form.errors.email }}</p>
             </div>
 
             <div>
-                <label for="password" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Kata Sandi</label>
+                <label for="password" class="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Kata Sandi</label>
                 <input
                     id="password"
                     type="password"
-                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all placeholder:text-slate-400"
+                    class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500 transition-all placeholder:text-gray-400"
                     v-model="form.password"
                     required
-                    placeholder="Minimal 8 karakter"
                     autocomplete="new-password"
+                    placeholder="Minimal 8 karakter"
                 />
-                <p v-if="form.errors.password" class="text-red-500 text-xs mt-1.5">{{ form.errors.password }}</p>
+                <p v-if="form.errors.password" class="text-red-500 text-xs mt-1">{{ form.errors.password }}</p>
             </div>
 
             <div>
-                <label for="password_confirmation" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Konfirmasi Kata Sandi</label>
+                <label for="password_confirmation" class="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Konfirmasi Sandi</label>
                 <input
                     id="password_confirmation"
                     type="password"
-                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all placeholder:text-slate-400"
+                    class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500 transition-all placeholder:text-gray-400"
                     v-model="form.password_confirmation"
                     required
-                    placeholder="Ulangi kata sandi Anda"
                     autocomplete="new-password"
+                    placeholder="Ulangi kata sandi"
                 />
-                <p v-if="form.errors.password_confirmation" class="text-red-500 text-xs mt-1.5">{{ form.errors.password_confirmation }}</p>
+                <p v-if="form.errors.password_confirmation" class="text-red-500 text-xs mt-1">{{ form.errors.password_confirmation }}</p>
             </div>
 
-            <div class="pt-4">
+            <div class="pt-2">
                 <button
                     type="submit"
-                    :class="['w-full py-3.5 px-4 bg-gradient-to-r from-brand-500 to-teal-500 text-white font-bold rounded-xl shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 hover:-translate-y-0.5 transition-all focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900', form.processing ? 'opacity-70 cursor-not-allowed' : '']"
+                    :class="['w-full py-2.5 px-4 bg-brand-600 text-white font-semibold text-sm rounded-lg hover:bg-brand-700 transition-colors', form.processing ? 'opacity-70 cursor-not-allowed' : '']"
                     :disabled="form.processing"
                 >
-                    <span v-if="form.processing" class="flex items-center justify-center gap-2">
-                        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        Membuat Akun...
-                    </span>
+                    <span v-if="form.processing">Mendaftar...</span>
                     <span v-else>Daftar Sekarang</span>
                 </button>
             </div>
-
-            <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800 text-center">
-                <p class="text-sm text-slate-600 dark:text-slate-400">
-                    Sudah memiliki akun?
-                    <Link
-                        :href="route('login')"
-                        class="font-semibold text-brand-600 hover:text-brand-500 dark:text-brand-400 transition-colors ml-1"
-                    >
-                        Masuk di sini
-                    </Link>
-                </p>
-            </div>
+            
+            <p class="text-center text-sm text-gray-500 mt-6 pt-4 border-t border-gray-100 dark:border-gray-800">
+                Sudah punya akun?
+                <Link :href="route('login')" class="font-semibold text-brand-600 hover:text-brand-700 ml-1">
+                    Masuk
+                </Link>
+            </p>
         </form>
     </GuestLayout>
 </template>

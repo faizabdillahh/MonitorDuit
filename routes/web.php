@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReceiptController;
+use App\Http\Controllers\RecurringTransactionController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\TransactionController;
@@ -47,6 +50,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Categories
     Route::resource('categories', CategoryController::class)
         ->only(['index', 'store', 'update', 'destroy']);
+
+    // Budgets
+    Route::resource('budgets', BudgetController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
+
+    // Notifications
+    Route::prefix('notifications')->name('notifications.')->group(function () {
+        Route::get('/',           [NotificationController::class, 'index'])->name('index');
+        Route::patch('{id}/read', [NotificationController::class, 'markRead'])->name('read');
+        Route::patch('read-all',  [NotificationController::class, 'markAllRead'])->name('read-all');
+        Route::delete('{id}',     [NotificationController::class, 'destroy'])->name('destroy');
+    });
+
+    // Recurring Transactions
+    Route::resource('recurring', RecurringTransactionController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
+    Route::patch('recurring/{recurring}/toggle', [RecurringTransactionController::class, 'toggle'])
+        ->name('recurring.toggle');
 
     // Settings
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');

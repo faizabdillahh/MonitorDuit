@@ -3,7 +3,9 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
+
+const user = usePage().props.auth?.user
 
 defineProps({
     mustVerifyEmail: {
@@ -16,33 +18,55 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Profil Pengguna" />
-
-    <AppLayout title="Profil Pengguna">
-        <div class="max-w-4xl mx-auto space-y-6">
-            
-            <div class="mb-6">
-                <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Profil Pengguna</h1>
-                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Kelola informasi pribadi dan keamanan akun Anda.</p>
+    <Head title="Profil" />
+    <AppLayout>
+        <!-- Profile Header (Instagram-style) -->
+        <div class="flex items-center gap-5 mb-8">
+            <div
+              class="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center text-white text-2xl font-bold shrink-0"
+              style="background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);"
+            >
+              {{ user?.name?.[0]?.toUpperCase() }}
             </div>
+            <div class="min-w-0">
+              <h1 class="text-xl font-semibold text-gray-900 dark:text-white">{{ user?.name }}</h1>
+              <p class="text-sm text-gray-400 mt-0.5 truncate">{{ user?.email }}</p>
+            </div>
+        </div>
 
+        <div class="space-y-5">
             <!-- Update Profile Info -->
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 shadow-sm">
-                <UpdateProfileInformationForm
-                    :must-verify-email="mustVerifyEmail"
-                    :status="status"
-                    class="max-w-xl"
-                />
+            <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
+                <div class="px-5 py-3 border-b border-gray-100 dark:border-gray-800">
+                    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Informasi Profil</h2>
+                </div>
+                <div class="p-5">
+                    <UpdateProfileInformationForm
+                        :must-verify-email="mustVerifyEmail"
+                        :status="status"
+                        class="max-w-lg"
+                    />
+                </div>
             </div>
 
             <!-- Update Password -->
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 shadow-sm">
-                <UpdatePasswordForm class="max-w-xl" />
+            <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
+                <div class="px-5 py-3 border-b border-gray-100 dark:border-gray-800">
+                    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Ubah Kata Sandi</h2>
+                </div>
+                <div class="p-5">
+                    <UpdatePasswordForm class="max-w-lg" />
+                </div>
             </div>
 
             <!-- Delete User -->
-            <div class="bg-red-50 dark:bg-red-500/10 rounded-2xl border border-red-200 dark:border-red-500/20 p-6 md:p-8 shadow-sm">
-                <DeleteUserForm class="max-w-xl" />
+            <div class="bg-white dark:bg-gray-900 border border-red-100 dark:border-red-500/20 rounded-xl overflow-hidden">
+                <div class="px-5 py-3 border-b border-red-100 dark:border-red-500/10">
+                    <h2 class="text-sm font-semibold text-red-600 dark:text-red-400">Hapus Akun</h2>
+                </div>
+                <div class="p-5">
+                    <DeleteUserForm class="max-w-lg" />
+                </div>
             </div>
         </div>
     </AppLayout>

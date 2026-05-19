@@ -4,7 +4,7 @@ import { Link, Head } from '@inertiajs/vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import { Bar } from 'vue-chartjs'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip } from 'chart.js'
-import { Wallet, ReceiptText, TrendingUp, Camera, ScanLine, Receipt } from 'lucide-vue-next'
+import { ArrowRight, AlertTriangle, XCircle, Camera } from 'lucide-vue-next'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip)
 
@@ -13,6 +13,7 @@ const props = defineProps({
   weeklyTrend: Array,
   recentTransactions: Array,
   categories: Array,
+  budgetWidgets: Array,
 })
 
 function formatCurrency(amount) {
@@ -23,10 +24,10 @@ const chartData = computed(() => ({
   labels: props.weeklyTrend.map(d => d.label),
   datasets: [{
     data: props.weeklyTrend.map(d => d.amount),
-    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+    backgroundColor: 'rgba(16, 185, 129, 0.15)',
     borderColor: '#10b981',
-    borderWidth: 2,
-    borderRadius: 8,
+    borderWidth: 1.5,
+    borderRadius: 6,
     borderSkipped: false,
   }]
 }))
@@ -39,152 +40,131 @@ const chartOptions = {
   }},
   scales: {
     y: { display: false },
-    x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 11 } } }
+    x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 11 } } }
   }
 }
-
-const summaryCards = computed(() => [
-  { label: 'Total Bulan Ini', value: formatCurrency(props.summary.monthly_total), icon: Wallet, color: 'from-brand-500 to-teal-500' },
-  { label: 'Jumlah Transaksi', value: props.summary.monthly_count, icon: ReceiptText, color: 'from-blue-500 to-indigo-500' },
-  { label: 'Rata-rata/Hari', value: formatCurrency(props.summary.daily_average), icon: TrendingUp, color: 'from-purple-500 to-pink-500' },
-])
 </script>
 
 <template>
   <Head title="Dashboard" />
-  <AppLayout title="Dashboard">
-    <!-- Greeting -->
-    <div class="mb-8">
-      <h1 class="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white">
-        Halo, {{ $page.props.auth.user.name }}! 👋
-      </h1>
-      <p class="text-slate-500 dark:text-slate-400 mt-1">Pantau pengeluaranmu hari ini</p>
+  <AppLayout>
+
+    <!-- Stories-like: Summary Cards (horizontal scroll on mobile) -->
+    <div class="flex gap-3 overflow-x-auto pb-1 mb-5 -mx-4 px-4 scrollbar-hide">
+      <div class="flex-shrink-0 w-[160px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
+        <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium">Bulan ini</p>
+        <p class="text-lg font-bold font-mono text-gray-900 dark:text-white mt-1.5 truncate">{{ formatCurrency(summary.monthly_total) }}</p>
+      </div>
+      <div class="flex-shrink-0 w-[140px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
+        <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium">Transaksi</p>
+        <p class="text-lg font-bold font-mono text-gray-900 dark:text-white mt-1.5">{{ summary.monthly_count }}</p>
+      </div>
+      <div class="flex-shrink-0 w-[160px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
+        <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium">Rata-rata/hari</p>
+        <p class="text-lg font-bold font-mono text-gray-900 dark:text-white mt-1.5 truncate">{{ formatCurrency(summary.daily_average) }}</p>
+      </div>
+      <!-- Scan CTA card -->
+      <Link :href="route('transactions.create')" class="flex-shrink-0 w-[120px] bg-gray-900 dark:bg-white border border-gray-800 dark:border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+        <Camera class="w-6 h-6 text-white dark:text-gray-900" />
+        <span class="text-xs font-semibold text-white dark:text-gray-900">Scan Struk</span>
+      </Link>
     </div>
 
-    <!-- Summary Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-      <div
-        v-for="card in summaryCards"
-        :key="card.label"
-        class="relative overflow-hidden bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 group hover:shadow-lg transition-all duration-300"
-      >
-        <div class="flex items-start justify-between">
-          <div>
-            <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">{{ card.label }}</p>
-            <p class="text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1">{{ card.value }}</p>
+    <!-- Chart Card (Instagram post-like) -->
+    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl mb-4 overflow-hidden">
+      <div class="px-4 py-3 flex items-center justify-between">
+        <span class="text-sm font-semibold text-gray-900 dark:text-white">Tren 7 hari</span>
+      </div>
+      <div class="px-4 pb-4 h-40">
+        <Bar :data="chartData" :options="chartOptions" />
+      </div>
+    </div>
+
+    <!-- Budget Widget (Instagram post-like) -->
+    <div v-if="budgetWidgets && budgetWidgets.length > 0" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl mb-4 overflow-hidden">
+      <div class="px-4 py-3 flex items-center justify-between border-b border-gray-100 dark:border-gray-800">
+        <span class="text-sm font-semibold text-gray-900 dark:text-white">Budget bulan ini</span>
+        <Link :href="route('budgets.index')" class="text-xs font-semibold text-brand-600 dark:text-brand-400">Lihat semua</Link>
+      </div>
+      <div class="divide-y divide-gray-50 dark:divide-gray-800">
+        <div v-for="item in budgetWidgets.slice(0, 4)" :key="item.budget.id" class="px-4 py-3">
+          <div class="flex items-center justify-between mb-1.5">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="text-base">{{ item.budget.category?.icon }}</span>
+              <span class="text-[13px] font-medium text-gray-900 dark:text-white truncate">{{ item.budget.category?.name }}</span>
+              <AlertTriangle v-if="item.status === 'warning'" class="w-3.5 h-3.5 text-amber-500 shrink-0" />
+              <XCircle v-if="item.status === 'exceeded'" class="w-3.5 h-3.5 text-red-500 shrink-0" />
+            </div>
+            <span class="text-xs font-mono" :class="{
+              'text-gray-400': item.status === 'normal',
+              'text-amber-500': item.status === 'warning',
+              'text-red-500': item.status === 'exceeded',
+            }">{{ item.percentage }}%</span>
           </div>
-          <div :class="['w-10 h-10 rounded-xl bg-gradient-to-br flex items-center justify-center text-white', card.color]">
-            <component :is="card.icon" class="w-5 h-5" />
+          <div class="h-[3px] bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div
+              class="h-full rounded-full transition-all duration-500"
+              :class="{
+                'bg-brand-500': item.status === 'normal',
+                'bg-amber-500': item.status === 'warning',
+                'bg-red-500': item.status === 'exceeded',
+              }"
+              :style="{ width: Math.min(item.percentage, 100) + '%' }"
+            ></div>
           </div>
         </div>
-        <div :class="['absolute bottom-0 left-0 h-1 bg-gradient-to-r w-full opacity-0 group-hover:opacity-100 transition-opacity', card.color]"></div>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Weekly Chart -->
-      <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="font-semibold text-slate-900 dark:text-white">Tren 7 Hari Terakhir</h2>
-        </div>
-        <div class="h-48">
-          <Bar :data="chartData" :options="chartOptions" />
-        </div>
-      </div>
-
-      <!-- Quick Actions -->
-      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
-        <h2 class="font-semibold text-slate-900 dark:text-white mb-4">Aksi Cepat</h2>
-        <div class="space-y-3">
-          <Link
-            :href="route('transactions.create')"
-            class="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 text-white hover:from-brand-600 hover:to-brand-700 transition-all shadow-lg shadow-brand-500/20 hover:shadow-brand-500/30 group"
-          >
-            <div class="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Camera class="w-5 h-5" />
-            </div>
-            <div>
-              <p class="font-semibold text-sm">Scan Struk</p>
-              <p class="text-xs text-brand-100">Foto & catat otomatis</p>
-            </div>
-          </Link>
-
-          <Link
-            :href="route('transactions.index')"
-            class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
-          >
-            <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400">
-              <ReceiptText class="w-5 h-5" />
-            </div>
-            <div>
-              <p class="font-semibold text-sm">Riwayat</p>
-              <p class="text-xs text-slate-500">Lihat semua transaksi</p>
-            </div>
-          </Link>
-
-          <Link
-            :href="route('statistics')"
-            class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
-          >
-            <div class="w-10 h-10 rounded-lg bg-purple-100 dark:bg-purple-500/20 flex items-center justify-center text-purple-600 dark:text-purple-400">
-              <TrendingUp class="w-5 h-5" />
-            </div>
-            <div>
-              <p class="font-semibold text-sm">Statistik</p>
-              <p class="text-xs text-slate-500">Analisis pengeluaran</p>
-            </div>
-          </Link>
-        </div>
-      </div>
-    </div>
-
-    <!-- Recent Transactions -->
-    <div class="mt-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="font-semibold text-slate-900 dark:text-white">Transaksi Terbaru</h2>
-        <Link :href="route('transactions.index')" class="text-sm text-brand-600 dark:text-brand-400 hover:text-brand-700 font-medium">
-          Lihat Semua →
+    <!-- Recent Transactions (Feed-style) -->
+    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
+      <div class="px-4 py-3 flex items-center justify-between border-b border-gray-100 dark:border-gray-800">
+        <span class="text-sm font-semibold text-gray-900 dark:text-white">Transaksi terbaru</span>
+        <Link :href="route('transactions.index')" class="text-xs font-semibold text-brand-600 dark:text-brand-400 flex items-center gap-0.5">
+          Semua <ArrowRight class="w-3 h-3" />
         </Link>
       </div>
 
-      <div v-if="recentTransactions.length > 0" class="divide-y divide-slate-100 dark:divide-slate-800">
-        <div
+      <div v-if="recentTransactions.length > 0">
+        <Link
           v-for="tx in recentTransactions"
           :key="tx.id"
-          class="flex items-center justify-between py-3 first:pt-0 last:pb-0"
+          :href="route('transactions.show', tx.id)"
+          class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50 dark:border-gray-800/50 last:border-0"
         >
-          <Link :href="route('transactions.show', tx.id)" class="flex items-center gap-3 min-w-0 flex-1 group">
-            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0" :style="{ backgroundColor: tx.category?.color + '15' }">
-              {{ tx.category?.icon || '📦' }}
-            </div>
-            <div class="min-w-0">
-              <p class="text-sm font-medium text-slate-900 dark:text-white truncate group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
-                {{ tx.merchant_name || tx.category?.name || 'Transaksi' }}
-              </p>
-              <p class="text-xs text-slate-500 dark:text-slate-400">
-                {{ new Date(tx.transaction_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) }}
-              </p>
-            </div>
-          </Link>
-          <span class="text-sm font-semibold font-mono text-slate-900 dark:text-white whitespace-nowrap ml-3">
+          <div class="w-11 h-11 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-lg shrink-0">
+            {{ tx.category?.icon || '📦' }}
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-[13px] font-semibold text-gray-900 dark:text-white truncate">
+              {{ tx.merchant_name || tx.category?.name || 'Transaksi' }}
+            </p>
+            <p class="text-xs text-gray-400 mt-0.5">
+              {{ new Date(tx.transaction_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) }}
+              <span v-if="tx.category?.name" class="ml-1">· {{ tx.category.name }}</span>
+            </p>
+          </div>
+          <span class="text-[13px] font-semibold font-mono text-gray-900 dark:text-white whitespace-nowrap">
             {{ formatCurrency(tx.total_amount) }}
           </span>
-        </div>
-      </div>
-
-      <!-- Empty State -->
-      <div v-else class="text-center py-12">
-        <Receipt class="w-12 h-12 text-slate-300 mx-auto mb-3" />
-        <p class="text-slate-500 dark:text-slate-400 font-medium">Belum ada transaksi</p>
-        <p class="text-sm text-slate-400 dark:text-slate-500 mt-1">Mulai dengan scan struk pertamamu!</p>
-        <Link
-          :href="route('transactions.create')"
-          class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-sm font-semibold transition-colors"
-        >
-          <ScanLine class="w-4 h-4" />
-          Scan Struk Sekarang
         </Link>
       </div>
+
+      <div v-else class="text-center py-10 px-4">
+        <p class="text-sm text-gray-400">Belum ada transaksi</p>
+        <Link :href="route('transactions.create')" class="inline-block mt-2 text-sm font-semibold text-brand-600">+ Tambah transaksi</Link>
+      </div>
     </div>
+
   </AppLayout>
 </template>
+
+<style scoped>
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+</style>

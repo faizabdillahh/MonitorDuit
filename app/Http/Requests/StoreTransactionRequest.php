@@ -20,9 +20,11 @@ class StoreTransactionRequest extends FormRequest
             'category_id'      => ['required', 'exists:categories,id'],
             'notes'            => ['nullable', 'string', 'max:1000'],
             'receipt_image'    => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,heic', 'max:10240'],
-            'source'           => ['nullable', 'string', 'in:ai,manual'],
+            'source'           => ['nullable', 'string', 'in:ai,manual,recurring'],
             'ai_confidence'    => ['nullable', 'string', 'in:high,medium,low'],
             'ai_raw_response'  => ['nullable', 'array'],
+            'currency'         => ['nullable', 'string', 'size:3'],
+            'manual_rate'      => ['nullable', 'numeric', 'min:0.000001'],
         ];
     }
 

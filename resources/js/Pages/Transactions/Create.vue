@@ -8,6 +8,8 @@ import { Upload, X, Loader2, Sparkles, CheckCircle2, ChevronDown } from 'lucide-
 
 const props = defineProps({
   categories: Array,
+  supportedCurrencies: Array,
+  defaultCurrency: String,
 })
 
 const { show, error } = useToast()
@@ -23,6 +25,8 @@ const form = useForm({
   ai_raw_response: null,
   receipt_image: null,
   receipt_image_path: null,
+  currency: props.defaultCurrency || 'IDR',
+  manual_rate: '',
 })
 
 const previewUrl = ref(null)
@@ -109,7 +113,7 @@ function submit() {
 <template>
   <Head title="Tambah Transaksi" />
   <AppLayout title="Tambah Transaksi">
-    <div class="max-w-3xl mx-auto">
+    <div class="w-full">
       <div class="mb-6">
         <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Tambah Pengeluaran</h1>
         <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Catat transaksi baru dengan scan struk atau manual</p>
@@ -175,9 +179,20 @@ function submit() {
 
             <div>
               <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Total Harga <span class="text-red-500">*</span></label>
-              <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-medium">Rp</span>
-                <input v-model="form.total_amount" type="number" step="0.01" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500 font-mono" placeholder="0" required :class="{'ring-2 ring-brand-500': form.source === 'ai' && form.total_amount}" />
+              <div class="flex gap-2">
+                <select v-model="form.currency" class="w-24 px-3 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500 font-mono">
+                  <option v-for="c in supportedCurrencies" :key="c" :value="c">{{ c }}</option>
+                </select>
+                <input v-model="form.total_amount" type="number" step="0.01" class="flex-1 px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500 font-mono" placeholder="0" required :class="{'ring-2 ring-brand-500': form.source === 'ai' && form.total_amount}" />
+              </div>
+              <div v-if="form.currency !== 'IDR'" class="mt-2 p-3 bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 rounded-xl">
+                <label class="block text-xs font-medium text-blue-700 dark:text-blue-400 mb-1.5">Rate Konversi ke IDR (Opsional)</label>
+                <div class="flex items-center gap-2">
+                  <span class="text-sm text-blue-600 dark:text-blue-300 font-mono">1 {{ form.currency }} = </span>
+                  <input v-model="form.manual_rate" type="number" step="0.000001" placeholder="Auto via API" class="w-32 px-2 py-1.5 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-500/30 rounded-lg text-sm text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 font-mono" />
+                  <span class="text-sm text-blue-600 dark:text-blue-300 font-mono">IDR</span>
+                </div>
+                <p class="text-[10px] text-blue-500 dark:text-blue-400 mt-1.5">Kosongkan untuk menggunakan rate otomatis (live).</p>
               </div>
               <p v-if="form.errors.total_amount" class="text-red-500 text-xs mt-1">{{ form.errors.total_amount }}</p>
             </div>

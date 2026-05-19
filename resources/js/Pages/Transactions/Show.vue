@@ -117,7 +117,18 @@ function closeModal() {
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Pengeluaran</p>
-              <p class="text-3xl font-bold font-mono text-slate-900 dark:text-white mt-1">{{ formatCurrency(transaction.total_amount) }}</p>
+              <p class="text-3xl font-bold font-mono text-slate-900 dark:text-white mt-1">
+                <span v-if="transaction.currency !== 'IDR'" class="text-xl text-slate-500 font-sans font-normal mr-1">{{ transaction.currency }}</span>
+                {{ transaction.currency !== 'IDR' ? Number(transaction.total_amount).toLocaleString('id-ID') : formatCurrency(transaction.total_amount) }}
+              </p>
+              <div v-if="transaction.currency !== 'IDR'" class="mt-1 flex items-center gap-2">
+                <span class="text-sm font-semibold font-mono text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/10 px-2 py-0.5 rounded">
+                  ≈ {{ formatCurrency(transaction.amount_idr) }}
+                </span>
+                <span class="text-[10px] text-slate-400">
+                  (Rate: {{ Number(transaction.exchange_rate).toLocaleString('id-ID') }})
+                </span>
+              </div>
             </div>
             <div class="text-right">
               <span v-if="transaction.source === 'ai'" class="px-2 py-1 text-xs font-bold rounded-md bg-brand-100 text-brand-700 dark:bg-brand-500/20 dark:text-brand-400">Diisi AI</span>

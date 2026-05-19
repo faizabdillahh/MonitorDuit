@@ -2,7 +2,7 @@
 import { ref, computed, watch } from 'vue'
 import { Link, Head, router } from '@inertiajs/vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
-import { Download, ScanLine, Search, Filter, X, Receipt } from 'lucide-vue-next'
+import { Download, Search, SlidersHorizontal, X } from 'lucide-vue-next'
 
 const props = defineProps({
   transactions: Object,
@@ -53,90 +53,141 @@ function exportData(format) {
 </script>
 
 <template>
-  <Head title="Riwayat Transaksi" />
+  <Head title="Transaksi" />
   <AppLayout>
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-      <div>
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Riwayat Pengeluaran</h1>
-        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">{{ transactions.total || 0 }} transaksi</p>
+
+    <!-- Search bar (Instagram explore style) -->
+    <div class="mb-4">
+      <div class="relative">
+        <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <input
+          v-model="search"
+          type="text"
+          placeholder="Cari..."
+          class="w-full pl-10 pr-20 py-2.5 bg-gray-100 dark:bg-gray-900 border-0 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 outline-none focus:ring-1 focus:ring-gray-300 dark:focus:ring-gray-700"
+        />
+        <div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+          <button v-if="hasActiveFilters" @click="resetFilters" class="p-1.5 text-gray-400 hover:text-red-500">
+            <X class="w-4 h-4" />
+          </button>
+          <button @click="showFilters = !showFilters" :class="['p-1.5 rounded-lg transition-colors', showFilters || hasActiveFilters ? 'text-brand-600' : 'text-gray-400']">
+            <SlidersHorizontal class="w-4 h-4" />
+          </button>
+        </div>
       </div>
-      <div class="flex items-center gap-2">
-        <button @click="exportData('xlsx')" class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-          <Download class="w-4 h-4" /> Export
-        </button>
-        <Link :href="route('transactions.create')" class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-brand-500 to-brand-600 rounded-xl shadow-lg shadow-brand-500/20 hover:shadow-brand-500/30 transition-shadow">
-          <ScanLine class="w-4 h-4" /> Scan Struk
-        </Link>
+
+      <!-- Filters panel -->
+      <div v-if="showFilters" class="mt-3 p-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Kategori</label>
+            <select v-model="categoryFilter" @change="applyFilters" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500">
+              <option value="">Semua</option>
+              <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.icon }} {{ cat.name }}</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Dari</label>
+            <input v-model="dateFrom" @change="applyFilters" type="date" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500" />
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Sampai</label>
+            <input v-model="dateTo" @change="applyFilters" type="date" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500" />
+          </div>
+        </div>
+        <div class="flex justify-between items-center mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
+          <span class="text-xs text-gray-400">{{ transactions.total || 0 }} transaksi</span>
+          <button @click="exportData('xlsx')" class="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-700">
+            <Download class="w-3.5 h-3.5" /> Export
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- Search & Filters -->
-    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 mb-6">
-      <div class="flex items-center gap-3">
-        <div class="flex-1 relative">
-          <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input v-model="search" type="text" placeholder="Cari merchant atau catatan..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none" />
-        </div>
-        <button @click="showFilters = !showFilters" :class="['flex items-center gap-2 px-3 py-2.5 rounded-xl border text-sm font-medium transition-colors', hasActiveFilters ? 'bg-brand-50 dark:bg-brand-500/10 border-brand-200 dark:border-brand-500/30 text-brand-700 dark:text-brand-400' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300']">
-          <Filter class="w-4 h-4" /> Filter
-        </button>
-        <button v-if="hasActiveFilters" @click="resetFilters" class="p-2.5 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors">
-          <X class="w-4 h-4" />
-        </button>
-      </div>
-      <div v-if="showFilters" class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
-        <div>
-          <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Kategori</label>
-          <select v-model="categoryFilter" @change="applyFilters" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500">
-            <option value="">Semua</option>
-            <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.icon }} {{ cat.name }}</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Dari Tanggal</label>
-          <input v-model="dateFrom" @change="applyFilters" type="date" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500" />
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Sampai Tanggal</label>
-          <input v-model="dateTo" @change="applyFilters" type="date" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500" />
-        </div>
-      </div>
+    <!-- Categories horizontal scroll (Instagram stories-like) -->
+    <div class="flex gap-3 overflow-x-auto pb-3 mb-4 -mx-4 px-4 scrollbar-hide">
+      <button
+        @click="categoryFilter = ''; applyFilters()"
+        :class="[
+          'flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-colors',
+          !categoryFilter
+            ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white'
+            : 'bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800',
+        ]"
+      >
+        Semua
+      </button>
+      <button
+        v-for="cat in categories"
+        :key="cat.id"
+        @click="categoryFilter = cat.id; applyFilters()"
+        :class="[
+          'flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-colors whitespace-nowrap',
+          categoryFilter == cat.id
+            ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white'
+            : 'bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800',
+        ]"
+      >
+        {{ cat.icon }} {{ cat.name }}
+      </button>
     </div>
 
-    <!-- List -->
-    <div v-if="transactions.data && transactions.data.length > 0" class="space-y-3">
-      <Link v-for="tx in transactions.data" :key="tx.id" :href="route('transactions.show', tx.id)" class="flex items-center gap-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 hover:shadow-md hover:border-brand-200 dark:hover:border-brand-500/30 transition-all group">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0" :style="{ backgroundColor: (tx.category?.color || '#6b7280') + '15' }">{{ tx.category?.icon || '📦' }}</div>
+    <!-- Transaction Feed -->
+    <div v-if="transactions.data && transactions.data.length > 0" class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
+      <Link
+        v-for="tx in transactions.data"
+        :key="tx.id"
+        :href="route('transactions.show', tx.id)"
+        class="flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-100 dark:border-gray-800 last:border-0"
+      >
+        <div class="w-11 h-11 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-lg shrink-0">
+          {{ tx.category?.icon || '📦' }}
+        </div>
         <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-2">
-            <p class="text-sm font-semibold text-slate-900 dark:text-white truncate group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">{{ tx.merchant_name || 'Transaksi' }}</p>
-            <span v-if="tx.source === 'ai'" class="px-1.5 py-0.5 text-[10px] font-bold rounded-md bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400">AI</span>
+          <div class="flex items-center gap-1.5">
+            <p class="text-[13px] font-semibold text-gray-900 dark:text-white truncate">{{ tx.merchant_name || 'Transaksi' }}</p>
+            <span v-if="tx.source === 'ai'" class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400">AI</span>
           </div>
-          <div class="flex items-center gap-2 mt-0.5">
-            <span class="text-xs text-slate-500 dark:text-slate-400">{{ new Date(tx.transaction_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) }}</span>
-            <span class="text-xs px-1.5 py-0.5 rounded-md" :style="{ backgroundColor: (tx.category?.color || '#6b7280') + '15', color: tx.category?.color }">{{ tx.category?.name }}</span>
-          </div>
+          <p class="text-xs text-gray-400 mt-0.5">
+            {{ new Date(tx.transaction_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) }}
+            <span v-if="tx.category?.name"> · {{ tx.category.name }}</span>
+          </p>
         </div>
-        <p class="text-sm font-bold font-mono text-slate-900 dark:text-white shrink-0">{{ formatCurrency(tx.total_amount) }}</p>
-      </Link>
-
-      <!-- Pagination -->
-      <div v-if="transactions.last_page > 1" class="flex justify-center gap-1 mt-6">
-        <template v-for="link in transactions.links" :key="link.label">
-          <Link v-if="link.url" :href="link.url" :class="['px-3 py-2 rounded-lg text-sm font-medium', link.active ? 'bg-brand-500 text-white' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700']" v-html="link.label" preserve-state />
-          <span v-else class="px-3 py-2 text-sm text-slate-400" v-html="link.label" />
-        </template>
-      </div>
-    </div>
-
-    <!-- Empty -->
-    <div v-else class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-16 text-center">
-      <Receipt class="w-16 h-16 text-slate-300 mx-auto mb-4" />
-      <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Belum ada transaksi</h3>
-      <p class="text-slate-500 dark:text-slate-400 mt-2">Mulai catat pengeluaranmu dengan scan struk!</p>
-      <Link :href="route('transactions.create')" class="inline-flex items-center gap-2 mt-6 px-5 py-2.5 bg-brand-500 text-white rounded-xl font-semibold text-sm shadow-lg shadow-brand-500/20 hover:shadow-brand-500/30 transition-shadow">
-        <ScanLine class="w-4 h-4" /> Scan Struk
+        <div class="text-right shrink-0">
+          <p class="text-[13px] font-semibold font-mono text-gray-900 dark:text-white">
+            <span v-if="tx.currency !== 'IDR'" class="text-[10px] text-gray-400 mr-0.5">{{ tx.currency }}</span>
+            {{ tx.currency !== 'IDR' ? Number(tx.total_amount).toLocaleString('id-ID') : formatCurrency(tx.total_amount) }}
+          </p>
+          <p v-if="tx.currency !== 'IDR'" class="text-[10px] text-gray-400 font-mono mt-0.5">≈ {{ formatCurrency(tx.amount_idr) }}</p>
+        </div>
       </Link>
     </div>
+
+    <!-- Pagination -->
+    <div v-if="transactions.last_page > 1" class="flex justify-center gap-1 mt-5">
+      <template v-for="link in transactions.links" :key="link.label">
+        <Link v-if="link.url" :href="link.url" :class="['px-3 py-1.5 rounded-lg text-xs font-medium', link.active ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900' : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800']" v-html="link.label" preserve-state />
+        <span v-else class="px-3 py-1.5 text-xs text-gray-300" v-html="link.label" />
+      </template>
+    </div>
+
+    <!-- Empty State -->
+    <div v-if="!transactions.data || transactions.data.length === 0" class="text-center py-16">
+      <p class="text-sm text-gray-400">Belum ada transaksi</p>
+      <Link :href="route('transactions.create')" class="inline-block mt-3 text-sm font-semibold text-brand-600">
+        + Tambah transaksi pertama
+      </Link>
+    </div>
+
   </AppLayout>
 </template>
+
+<style scoped>
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+</style>

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
 use App\Models\Category;
 use App\Models\Transaction;
+use App\Services\CurrencyService;
 use App\Services\TransactionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +15,8 @@ use Inertia\Inertia;
 class TransactionController extends Controller
 {
     public function __construct(
-        private TransactionService $transactionService
+        private TransactionService $transactionService,
+        private CurrencyService $currencyService,
     ) {}
 
     public function index(Request $request)
@@ -37,7 +39,9 @@ class TransactionController extends Controller
         $categories = Category::forUser(auth()->id())->get();
 
         return Inertia::render('Transactions/Create', [
-            'categories' => $categories,
+            'categories'          => $categories,
+            'supportedCurrencies' => $this->currencyService->getSupportedCurrencies(),
+            'defaultCurrency'     => auth()->user()->default_currency ?? 'IDR',
         ]);
     }
 

@@ -14,6 +14,9 @@ class Transaction extends Model
         'category_id',
         'merchant_name',
         'total_amount',
+        'amount_idr',
+        'exchange_rate',
+        'rate_fetched_at',
         'currency',
         'transaction_date',
         'notes',
@@ -21,11 +24,15 @@ class Transaction extends Model
         'ai_confidence',
         'ai_raw_response',
         'receipt_image_path',
+        'recurring_transaction_id',
     ];
 
     protected $casts = [
         'transaction_date' => 'date',
         'total_amount'     => 'decimal:2',
+        'amount_idr'       => 'decimal:2',
+        'exchange_rate'    => 'decimal:6',
+        'rate_fetched_at'  => 'datetime',
         'ai_raw_response'  => 'array',
         'source'           => TransactionSource::class,
         'ai_confidence'    => AiConfidence::class,
@@ -39,5 +46,10 @@ class Transaction extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function recurringTransaction(): BelongsTo
+    {
+        return $this->belongsTo(RecurringTransaction::class);
     }
 }

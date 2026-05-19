@@ -4,6 +4,7 @@ namespace App\Enums;
 
 enum TransactionSource: string
 {
-    case AI = 'ai';
-    case Manual = 'manual';
+    case AI        = 'ai';
+    case Manual    = 'manual';
+    case Recurring = 'recurring';
 }

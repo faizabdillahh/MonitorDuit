@@ -11,68 +11,64 @@ defineProps({
 <template>
     <Head title="Selamat Datang" />
 
-    <div class="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans selection:bg-brand-500 selection:text-white text-slate-900 dark:text-white">
+    <div class="min-h-screen bg-[#fafafa] dark:bg-black font-sans text-gray-900 dark:text-gray-100">
         <!-- Navigation -->
-        <nav class="absolute w-full top-0 z-50">
-            <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-brand-400 to-brand-600 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/25">
-                        <span class="text-white font-bold text-lg">M</span>
+        <header class="sticky top-0 z-40 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+            <div class="max-w-5xl mx-auto px-4 h-[60px] flex justify-between items-center">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center shadow-sm" style="background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);">
+                        <span class="text-white font-bold text-xs">M</span>
                     </div>
-                    <span class="font-bold text-xl tracking-tight">MonitorDuit</span>
+                    <span class="font-bold text-xl tracking-tight hidden sm:block" style="font-family: 'Plus Jakarta Sans', sans-serif;">MonitorDuit</span>
                 </div>
-                <div v-if="canLogin" class="flex items-center gap-4">
+                <div v-if="canLogin" class="flex items-center gap-3">
                     <template v-if="$page.props.auth.user">
-                        <Link :href="route('dashboard')" class="text-sm font-semibold hover:text-brand-500 transition-colors">
+                        <Link :href="route('dashboard')" class="text-sm font-semibold hover:text-brand-600 transition-colors">
                             Dashboard
                         </Link>
                     </template>
                     <template v-else>
-                        <Link :href="route('login')" class="text-sm font-medium hover:text-brand-500 transition-colors">
+                        <Link :href="route('login')" class="text-sm font-medium hover:text-brand-600 transition-colors px-3 py-1.5">
                             Masuk
                         </Link>
-                        <Link v-if="canRegister" :href="route('register')" class="px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-semibold rounded-full hover:scale-105 transition-transform">
-                            Daftar Gratis
+                        <Link v-if="canRegister" :href="route('register')" class="px-4 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium rounded-lg transition-colors">
+                            Daftar
                         </Link>
                     </template>
                 </div>
             </div>
-        </nav>
+        </header>
 
         <!-- Hero Section -->
-        <main class="relative flex flex-col items-center justify-center min-h-screen px-6 pt-20 pb-16 text-center overflow-hidden">
+        <main class="flex flex-col items-center justify-center pt-10 pb-16 px-4 text-center">
             
-            <!-- Background Glows -->
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-500/20 dark:bg-brand-500/10 blur-[120px] rounded-full pointer-events-none"></div>
-            <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-teal-500/10 dark:bg-teal-500/5 blur-[100px] rounded-full pointer-events-none"></div>
-
-            <div class="relative z-10 max-w-4xl mx-auto">
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 text-sm font-semibold mb-8 border border-brand-200 dark:border-brand-500/20">
+            <div class="max-w-3xl mx-auto">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-brand-600 dark:text-brand-400 text-xs font-semibold mb-8">
                     <span class="relative flex h-2 w-2">
                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
                       <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
                     </span>
-                    Kini dengan AI Scanner
+                    Kini dengan AI Receipt Scanner
                 </div>
                 
-                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-tight">
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
                     Catat Pengeluaran,<br />
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-brand-600">Cukup Foto Struknya.</span>
+                    <span class="text-brand-600 dark:text-brand-400">Cukup Foto Struknya.</span>
                 </h1>
                 
-                <p class="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                <p class="text-base md:text-lg text-gray-500 dark:text-gray-400 mb-10 max-w-xl mx-auto leading-relaxed">
                     Tinggalkan cara lama mencatat pengeluaran secara manual. MonitorDuit menggunakan AI untuk membaca struk belanja Anda otomatis dalam hitungan detik.
                 </p>
                 
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <Link v-if="$page.props.auth.user" :href="route('dashboard')" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-brand-500 to-teal-500 text-white font-bold rounded-2xl shadow-xl shadow-brand-500/20 hover:shadow-brand-500/40 hover:-translate-y-1 transition-all text-lg">
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <Link v-if="$page.props.auth.user" :href="route('dashboard')" class="w-full sm:w-auto px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-colors">
                         Buka Dashboard
                     </Link>
                     <template v-else>
-                        <Link :href="route('register')" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-brand-500 to-teal-500 text-white font-bold rounded-2xl shadow-xl shadow-brand-500/20 hover:shadow-brand-500/40 hover:-translate-y-1 transition-all text-lg">
+                        <Link :href="route('register')" class="w-full sm:w-auto px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-colors">
                             Mulai Sekarang — Gratis
                         </Link>
-                        <Link :href="route('login')" class="w-full sm:w-auto px-8 py-4 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-white font-bold rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-lg">
+                        <Link :href="route('login')" class="w-full sm:w-auto px-6 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                             Sudah Punya Akun?
                         </Link>
                     </template>
@@ -80,58 +76,63 @@ defineProps({
             </div>
 
             <!-- Features Grid -->
-            <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 mt-24 max-w-5xl mx-auto w-full text-left">
-                <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                    <div class="w-14 h-14 bg-brand-50 dark:bg-brand-500/10 text-brand-500 rounded-2xl flex items-center justify-center mb-6">
-                        <Camera class="w-7 h-7" />
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-24 max-w-5xl mx-auto w-full text-left px-4">
+                <!-- Feature 1 -->
+                <div class="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-brand-300 dark:hover:border-brand-700 transition-colors">
+                    <div class="w-12 h-12 bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 rounded-xl flex items-center justify-center mb-6">
+                        <Camera class="w-6 h-6" />
                     </div>
-                    <h3 class="text-xl font-bold mb-3">Scan Pintar AI</h3>
-                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                    <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Scan Pintar AI</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
                         Foto struk belanja Anda dan AI kami akan langsung mengekstrak total harga, tanggal, dan nama toko secara instan.
                     </p>
                 </div>
-                <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                    <div class="w-14 h-14 bg-blue-50 dark:bg-blue-500/10 text-blue-500 rounded-2xl flex items-center justify-center mb-6">
-                        <BarChart2 class="w-7 h-7" />
+                
+                <!-- Feature 2 -->
+                <div class="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-brand-300 dark:hover:border-brand-700 transition-colors">
+                    <div class="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center mb-6">
+                        <BarChart2 class="w-6 h-6" />
                     </div>
-                    <h3 class="text-xl font-bold mb-3">Analitik Detail</h3>
-                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                    <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Analitik Visual</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
                         Pantau kemana perginya uang Anda dengan visualisasi grafik interaktif mingguan dan bulanan yang memanjakan mata.
                     </p>
                 </div>
-                <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                    <div class="w-14 h-14 bg-purple-50 dark:bg-purple-500/10 text-purple-500 rounded-2xl flex items-center justify-center mb-6">
-                        <Moon class="w-7 h-7" />
+                
+                <!-- Feature 3 -->
+                <div class="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-brand-300 dark:hover:border-brand-700 transition-colors">
+                    <div class="w-12 h-12 bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center mb-6">
+                        <Moon class="w-6 h-6" />
                     </div>
-                    <h3 class="text-xl font-bold mb-3">Tampilan Premium</h3>
-                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
-                        Didesain dengan indah, responsif di semua layar, dan mendukung Mode Gelap sepenuhnya demi kenyamanan mata Anda.
+                    <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Desain Premium</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        Didesain dengan sangat indah, responsif di semua ukuran layar, dan mendukung Mode Gelap sepenuhnya.
                     </p>
                 </div>
             </div>
         </main>
 
         <!-- Footer -->
-        <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 relative z-10">
-            <div class="max-w-7xl mx-auto px-6 py-8">
-                <div class="md:flex md:items-center md:justify-between">
-                    <div class="flex justify-center md:justify-start items-center gap-2 mb-4 md:mb-0">
-                        <div class="w-6 h-6 bg-gradient-to-br from-brand-400 to-brand-600 rounded flex items-center justify-center shadow-sm">
+        <footer class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 mt-12">
+            <div class="max-w-5xl mx-auto px-4 py-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-6 h-6 rounded-full flex items-center justify-center shadow-sm" style="background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);">
                             <span class="text-white font-bold text-[10px]">M</span>
                         </div>
-                        <span class="text-slate-900 dark:text-white font-semibold text-sm">MonitorDuit</span>
+                        <span class="text-gray-900 dark:text-white font-semibold text-sm">MonitorDuit</span>
                     </div>
                     
-                    <div class="flex justify-center gap-6 text-sm text-slate-500 dark:text-slate-400 flex-wrap">
-                        <Link :href="route('about')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Tentang Kami</Link>
-                        <Link :href="route('help')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Bantuan</Link>
-                        <Link :href="route('privacy')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Privasi</Link>
-                        <Link :href="route('terms')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Syarat & Ketentuan</Link>
+                    <div class="flex flex-wrap gap-4 text-xs font-medium text-gray-500 dark:text-gray-400">
+                        <Link :href="route('about')" class="hover:text-brand-600 transition-colors">Tentang Kami</Link>
+                        <Link :href="route('help')" class="hover:text-brand-600 transition-colors">Bantuan</Link>
+                        <Link :href="route('privacy')" class="hover:text-brand-600 transition-colors">Privasi</Link>
+                        <Link :href="route('terms')" class="hover:text-brand-600 transition-colors">Syarat Ketentuan</Link>
                     </div>
                 </div>
-                <div class="mt-8 border-t border-slate-100 dark:border-slate-800/50 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 dark:text-slate-500">
-                    <p>&copy; {{ new Date().getFullYear() }} MonitorDuit. Seluruh hak cipta dilindungi.</p>
-                    <p class="mt-2 md:mt-0 font-medium">Versi 1.1</p>
+                <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center text-xs text-gray-400">
+                    <p>&copy; {{ new Date().getFullYear() }} MonitorDuit.</p>
+                    <p>Versi 1.1</p>
                 </div>
             </div>
         </footer>

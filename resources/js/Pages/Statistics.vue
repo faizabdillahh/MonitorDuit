@@ -72,77 +72,74 @@ const donutOptions = {
 <template>
   <Head title="Statistik" />
   <AppLayout title="Statistik">
-    <!-- Month Navigation -->
-    <div class="flex items-center justify-between bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 mb-6">
-      <button @click="changeMonth(-1)" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
-        <ChevronLeft class="w-5 h-5 text-slate-600 dark:text-slate-400" />
+    <!-- Header -->
+    <div class="mb-5">
+      <h1 class="text-xl font-semibold text-gray-900 dark:text-white">Statistik</h1>
+      <p class="text-sm text-gray-500 mt-0.5">Analisis pengeluaran bulanan</p>
+    </div>
+
+    <!-- Month selector -->
+    <div class="flex items-center justify-center gap-3 mb-6">
+      <button @click="changeMonth(-1)" class="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 transition-colors">
+        <ChevronLeft class="w-4 h-4" />
       </button>
-      <div class="text-center">
-        <h2 class="text-lg font-bold text-slate-900 dark:text-white">{{ summary.month_name }}</h2>
-      </div>
-      <button @click="changeMonth(1)" :disabled="isCurrentMonth" :class="['p-2 rounded-xl transition-colors', isCurrentMonth ? 'opacity-30 cursor-not-allowed' : 'hover:bg-slate-100 dark:hover:bg-slate-800']">
-        <ChevronRight class="w-5 h-5 text-slate-600 dark:text-slate-400" />
+      <span class="text-sm font-medium text-gray-900 dark:text-white min-w-[160px] text-center">{{ summary.month_name }}</span>
+      <button @click="changeMonth(1)" :disabled="isCurrentMonth" :class="['p-1.5 rounded-md transition-colors', isCurrentMonth ? 'opacity-30 cursor-not-allowed text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400']">
+        <ChevronRight class="w-4 h-4" />
       </button>
     </div>
 
-    <!-- Overview Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden">
-        <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Total Pengeluaran</p>
-        <p class="text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1">{{ formatCurrency(summary.total_amount) }}</p>
-        
-        <div v-if="summary.change_percent !== null" class="mt-2 flex items-center gap-1 text-sm">
-          <span v-if="summary.change_percent > 0" class="text-red-500 flex items-center gap-1">
-            <TrendingUp class="w-4 h-4" />
-            <span class="font-mono">{{ summary.change_percent }}%</span>
-          </span>
-          <span v-else-if="summary.change_percent < 0" class="text-brand-500 flex items-center gap-1">
-            <TrendingDown class="w-4 h-4" />
-            <span class="font-mono">{{ Math.abs(summary.change_percent) }}%</span>
-          </span>
-          <span class="text-slate-400">vs bulan lalu</span>
+    <!-- Summary -->
+    <div class="grid grid-cols-3 gap-3 mb-4">
+      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
+        <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium">Total</p>
+        <p class="text-base sm:text-lg font-bold font-mono text-gray-900 dark:text-white mt-1 truncate">{{ formatCurrency(summary.total_amount) }}</p>
+        <div v-if="summary.change_percent !== null" class="mt-1 flex items-center gap-1 text-xs">
+          <span v-if="summary.change_percent > 0" class="text-red-500 flex items-center gap-0.5"><TrendingUp class="w-3 h-3" />{{ summary.change_percent }}%</span>
+          <span v-else-if="summary.change_percent < 0" class="text-brand-500 flex items-center gap-0.5"><TrendingDown class="w-3 h-3" />{{ Math.abs(summary.change_percent) }}%</span>
         </div>
       </div>
-      
-      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden">
-        <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Rata-rata Harian</p>
-        <p class="text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1">{{ formatCurrency(summary.daily_average) }}</p>
-        <p class="mt-2 text-sm text-slate-400">Berdasarkan <span class="font-mono">{{ summary.total_count }}</span> transaksi</p>
+      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
+        <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium">Rata-rata</p>
+        <p class="text-base sm:text-lg font-bold font-mono text-gray-900 dark:text-white mt-1 truncate">{{ formatCurrency(summary.daily_average) }}</p>
       </div>
-
-      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden">
-        <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Kategori Terbanyak</p>
-        <p class="text-2xl font-bold text-slate-900 dark:text-white mt-1">{{ summary.top_category || '-' }}</p>
+      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
+        <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium">Top</p>
+        <p class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mt-1 truncate">{{ summary.top_category || '-' }}</p>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-      <!-- Daily Bar Chart -->
-      <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
-        <h3 class="font-semibold text-slate-900 dark:text-white mb-4">Pengeluaran Harian</h3>
-        <div class="h-64">
-          <Bar :data="barData" :options="barOptions" />
-        </div>
+    <!-- Daily Chart -->
+    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl mb-4 overflow-hidden">
+      <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+        <span class="text-sm font-semibold text-gray-900 dark:text-white">Pengeluaran harian</span>
       </div>
+      <div class="px-4 pb-4 pt-2 h-56">
+        <Bar :data="barData" :options="barOptions" />
+      </div>
+    </div>
 
-      <!-- Category Donut -->
-      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
-        <h3 class="font-semibold text-slate-900 dark:text-white mb-4">Proporsi Kategori</h3>
-        <div class="h-48 relative">
+    <!-- Category Donut -->
+    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
+      <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+        <span class="text-sm font-semibold text-gray-900 dark:text-white">Proporsi kategori</span>
+      </div>
+      <div class="p-4">
+        <div class="h-44 relative">
           <Doughnut v-if="summary.category_breakdown.length > 0" :data="donutData" :options="donutOptions" />
-          <div v-else class="absolute inset-0 flex items-center justify-center text-slate-400 text-sm">Tidak ada data</div>
+          <div v-else class="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">Tidak ada data</div>
         </div>
-        
-        <div class="mt-6 space-y-3" v-if="summary.category_breakdown.length > 0">
-          <div v-for="cat in summary.category_breakdown.slice(0, 5)" :key="cat.category_id" class="flex items-center justify-between">
+        <div class="mt-4 divide-y divide-gray-100 dark:divide-gray-800" v-if="summary.category_breakdown.length > 0">
+          <div v-for="cat in summary.category_breakdown.slice(0, 5)" :key="cat.category_id" class="flex items-center justify-between py-2.5">
             <div class="flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full" :style="{ backgroundColor: cat.category_color }"></span>
-              <span class="text-sm text-slate-700 dark:text-slate-300">{{ cat.category_name }}</span>
+              <span class="w-2.5 h-2.5 rounded-full" :style="{ backgroundColor: cat.category_color }"></span>
+              <span class="text-[13px] text-gray-700 dark:text-gray-300">{{ cat.category_name }}</span>
             </div>
-            <span class="text-sm font-semibold font-mono text-slate-900 dark:text-white">{{ formatCurrency(cat.total_amount) }}</span>
+            <span class="text-[13px] font-semibold font-mono text-gray-900 dark:text-white">{{ formatCurrency(cat.total_amount) }}</span>
           </div>
         </div>
       </div>
     </div>
   </AppLayout>
 </template>
+

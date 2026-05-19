@@ -24,6 +24,12 @@ class User extends Authenticatable
         'password',
         'dark_mode_preference',
         'timezone',
+        'default_currency',
+        'notif_budget_warning',
+        'notif_budget_exceeded',
+        'notif_reminder_email',
+        'reminder_idle_days',
+        'last_reminded_at',
     ];
 
     /**
@@ -44,9 +50,35 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'email_verified_at'    => 'datetime',
+            'password'             => 'hashed',
+            'notif_budget_warning' => 'boolean',
+            'notif_budget_exceeded'=> 'boolean',
+            'notif_reminder_email' => 'boolean',
+            'last_reminded_at'     => 'datetime',
         ];
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            $defaultCategories = [
+                ['name' => 'Makanan', 'icon' => '🍔', 'color' => '#f59e0b'],
+                ['name' => 'Transportasi', 'icon' => '🚗', 'color' => '#3b82f6'],
+                ['name' => 'Belanja', 'icon' => '🛒', 'color' => '#ec4899'],
+                ['name' => 'Tagihan', 'icon' => '🧾', 'color' => '#ef4444'],
+                ['name' => 'Hiburan', 'icon' => '🎬', 'color' => '#8b5cf6'],
+            ];
+
+            foreach ($defaultCategories as $cat) {
+                $user->categories()->create([
+                    'name' => $cat['name'],
+                    'icon' => $cat['icon'],
+                    'color' => $cat['color'],
+                    'is_default' => false,
+                ]);
+            }
+        });
     }
 
     public function categories(): HasMany
@@ -62,5 +94,10 @@ class User extends Authenticatable
     public function exports(): HasMany
     {
         return $this->hasMany(Export::class);
+    }
+
+    public function budgets(): HasMany
+    {
+        return $this->hasMany(Budget::class);
     }
 }
