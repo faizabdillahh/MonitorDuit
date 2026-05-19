@@ -5,7 +5,7 @@
 <h1 align="center">MonitorDuit 💸</h1>
 
 <p align="center">
-  <strong>Aplikasi Pencatatan Keuangan Pribadi Cerdas dengan Integrasi AI Pemindai Struk (Versi 1.1)</strong>
+  <strong>Aplikasi Pencatatan Keuangan Pribadi Cerdas dengan Integrasi AI Pemindai Struk (Versi 1.2.0)</strong>
 </p>
 
 ---
@@ -14,13 +14,14 @@
 
 **MonitorDuit** adalah aplikasi pencatatan pengeluaran pribadi modern yang dirancang untuk menghilangkan kerumitan input data manual. Dengan bantuan **Kecerdasan Buatan (Google Gemini AI)**, pengguna cukup memotret struk belanja, dan sistem akan secara otomatis mengekstrak nominal, nama merchant, serta tanggal transaksi. 
 
-Aplikasi ini dibangun menggunakan arsitektur *monolith* modern (*Laravel + Vue.js + Inertia.js*) dan didesain dengan antarmuka bergaya *Glassmorphism* dan *Dark Mode* interaktif menggunakan Tailwind CSS v4.
+Aplikasi ini dibangun menggunakan arsitektur *monolith* modern (*Laravel + Vue.js + Inertia.js*) dan didesain dengan antarmuka bergaya *Instagram / Minimalist Mobile-First* interaktif menggunakan Tailwind CSS v4.
 
 ---
 
 ## ✨ Fitur Utama
 
 - 🤖 **AI Receipt Scanner:** Menggunakan model `gemini-2.5-flash` untuk membaca teks pada struk belanja dan mengubahnya menjadi data transaksi terstruktur.
+- 🔁 **Transaksi Berulang (Recurring):** Otomatisasi pengeluaran rutin (harian, mingguan, bulanan, tahunan) tanpa perlu input ulang.
 - 📊 **Dashboard & Statistik:** Visualisasi pengeluaran bulanan dan harian menggunakan grafik interaktif (Bar & Doughnut Chart) yang akurat.
 - 🌓 **Smart Theme System:** Dukungan penuh untuk Mode Terang (*Light Mode*) dan Mode Gelap (*Dark Mode*) dengan preferensi yang tersimpan di basis data pengguna.
 - 🏷️ **Kategori Kustom & Emoji Picker:** Personalisasi kategori pengeluaran secara *full custom* lengkap dengan pilihan warna dan *icon/emoji picker* yang interaktif.
@@ -121,15 +122,26 @@ Aplikasi kini dapat diakses melalui browser di alamat: `http://localhost:8000`
 
 ---
 
-## 🏗️ Menjalankan Worker (Penting untuk Fitur AI)
+## 🏗️ Menjalankan Worker & Scheduler (Penting)
 
-Karena pemrosesan gambar oleh AI membutuhkan waktu beberapa detik, MonitorDuit menggunakan sistem *Queue* (Antrean) latar belakang untuk mencegah layar pengguna *freeze*.
+Aplikasi ini menggunakan proses latar belakang (*background jobs*) untuk pemindaian gambar AI dan otomatisasi transaksi berulang.
 
-Agar fitur unggah struk berfungsi, Anda **wajib** menjalankan *queue worker* di terminal yang aktif:
+### 1. Queue Worker (Untuk Fitur AI)
+Agar fitur unggah struk tidak membuat aplikasi *freeze*, Anda **wajib** menjalankan *queue worker* di terminal baru:
 ```bash
 php artisan queue:work
 ```
 *(Pada environment `.env`, pastikan `QUEUE_CONNECTION=database` atau `redis`)*
+
+### 2. Task Scheduler (Untuk Transaksi Berulang)
+Agar fitur Transaksi Berulang (*Recurring Transactions*) dieksekusi secara otomatis sesuai jadwal (harian/mingguan/bulanan), jalankan *scheduler*:
+```bash
+# Di lokal/Windows (biarkan terminal terbuka):
+php artisan schedule:work
+
+# Di server produksi (Linux), tambahkan ke Crontab:
+* * * * * cd /path-to-monitorduit && php artisan schedule:run >> /dev/null 2>&1
+```
 
 ---
 
