@@ -139,28 +139,35 @@ function formatDate(d) {
       <div
         v-for="item in recurrings"
         :key="item.id"
-        :class="['flex items-center gap-3 px-4 py-3.5 border-b border-gray-100 dark:border-gray-800 last:border-0 group transition-opacity', !item.is_active && 'opacity-40']"
+        :class="['flex flex-col sm:flex-row sm:items-center justify-between px-4 py-3.5 border-b border-gray-100 dark:border-gray-800 last:border-0 group transition-opacity gap-2 sm:gap-3', !item.is_active && 'opacity-40']"
       >
-        <div class="w-11 h-11 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-lg shrink-0">
-          {{ item.category?.icon }}
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-lg shrink-0">
+            {{ item.category?.icon }}
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-[13px] font-semibold text-gray-900 dark:text-white truncate">
+              {{ item.merchant_name || item.category?.name }}
+            </p>
+            <p class="text-xs text-gray-400 mt-0.5">
+              {{ freqLabel(item.frequency) }} · Berikutnya: {{ formatDate(item.next_run_date) }}
+            </p>
+          </div>
         </div>
-        <div class="flex-1 min-w-0">
-          <p class="text-[13px] font-semibold text-gray-900 dark:text-white truncate">
-            {{ item.merchant_name || item.category?.name }}
-          </p>
-          <p class="text-xs text-gray-400 mt-0.5">
-            {{ freqLabel(item.frequency) }} · Berikutnya: {{ formatDate(item.next_run_date) }}
-          </p>
-        </div>
-        <div class="flex items-center gap-2 shrink-0">
+
+        <div class="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto mt-1 sm:mt-0 pt-2 sm:pt-0 border-t sm:border-0 border-gray-50 dark:border-gray-800/50">
           <span class="text-[13px] font-semibold font-mono text-gray-900 dark:text-white">{{ formatRp(item.amount) }}</span>
-          <div class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button @click="toggleActive(item)" class="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800" :title="item.is_active ? 'Nonaktifkan' : 'Aktifkan'">
-              <ToggleRight v-if="item.is_active" class="w-4 h-4 text-brand-500" />
-              <ToggleLeft v-else class="w-4 h-4 text-gray-400" />
+          <div class="flex items-center gap-0.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+            <button @click="toggleActive(item)" class="p-2 sm:p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800" :title="item.is_active ? 'Nonaktifkan' : 'Aktifkan'">
+              <ToggleRight v-if="item.is_active" class="w-4.5 h-4.5 sm:w-4 sm:h-4 text-brand-500" />
+              <ToggleLeft v-else class="w-4.5 h-4.5 sm:w-4 sm:h-4 text-gray-400" />
             </button>
-            <button @click="openEditModal(item)" class="p-1.5 rounded-md text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-800"><Edit2 class="w-3.5 h-3.5" /></button>
-            <button @click="confirmDelete(item.id)" class="p-1.5 rounded-md text-gray-400 hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-800"><Trash2 class="w-3.5 h-3.5" /></button>
+            <button @click="openEditModal(item)" class="p-2 sm:p-1.5 rounded-md text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10">
+              <Edit2 class="w-4 h-4 sm:w-3.5 sm:h-3.5" />
+            </button>
+            <button @click="confirmDelete(item.id)" class="p-2 sm:p-1.5 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10">
+              <Trash2 class="w-4 h-4 sm:w-3.5 sm:h-3.5" />
+            </button>
           </div>
         </div>
       </div>
@@ -210,7 +217,13 @@ function formatDate(d) {
                 </div>
 
                 <div v-if="!editingItem">
-                  <label class="block text-xs font-medium text-gray-500 mb-1">Tanggal Mulai</label>
+                  <div class="flex items-center justify-between mb-1">
+                    <label class="block text-xs font-medium text-gray-500">Tanggal Mulai</label>
+                    <div class="flex items-center gap-3">
+                      <button type="button" @click="form.start_date = ''" class="text-[11px] font-medium text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">Clear</button>
+                      <button type="button" @click="form.start_date = new Date().toISOString().split('T')[0]" class="text-[11px] font-medium text-brand-600 dark:text-brand-400 hover:text-brand-700">Hari Ini</button>
+                    </div>
+                  </div>
                   <input v-model="form.start_date" type="date" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500" required />
                 </div>
 

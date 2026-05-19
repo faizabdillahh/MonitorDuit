@@ -34,14 +34,26 @@ class BudgetService
                 ->whereYear('transaction_date', $year)
                 ->sum('amount_idr');
 
+            // Hitung juga transaksi recurring yang belum jatuh tempo di bulan ini (projected/cadangan budget)
+            $projected = \App\Models\RecurringTransaction::where('user_id', $budget->user_id)
+                ->where('category_id', $budget->category_id)
+                ->where('is_active', true)
+                ->whereMonth('next_run_date', $month)
+                ->whereYear('next_run_date', $year)
+                ->sum('amount');
+
+            $totalSpent = $spent + $projected;
+
             $percentage = $budget->amount > 0
-                ? round(($spent / $budget->amount) * 100, 1)
+                ? round(($totalSpent / $budget->amount) * 100, 1)
                 : 0;
 
             return [
                 'budget'     => $budget,
-                'spent'      => (float) $spent,
-                'remaining'  => max(0, $budget->amount - $spent),
+                'spent'      => (float) $totalSpent,
+                'actual'     => (float) $spent,
+                'projected'  => (float) $projected,
+                'remaining'  => max(0, $budget->amount - $totalSpent),
                 'percentage' => $percentage,
                 'status'     => match(true) {
                     $percentage >= 100 => 'exceeded',

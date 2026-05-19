@@ -1,25 +1,35 @@
-import { ref, onMounted, watch } from 'vue'
-import { router, usePage } from '@inertiajs/vue3'
+import { ref, onMounted } from 'vue'
+import { router } from '@inertiajs/vue3'
+
+// Global state so all components share the same reactivity
+const isDark = ref(false)
+let initialized = false
 
 export function useTheme() {
-  const isDark = ref(false)
-
   onMounted(() => {
-    const stored = localStorage.getItem('theme')
-    if (stored === 'dark') {
-      isDark.value = true
-    } else if (stored === 'light') {
-      isDark.value = false
-    } else {
-      isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+    if (!initialized && typeof window !== 'undefined') {
+      const stored = localStorage.getItem('theme')
+      if (stored === 'dark') {
+        isDark.value = true
+      } else if (stored === 'light') {
+        isDark.value = false
+      } else {
+        isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+      }
+      applyTheme()
+      initialized = true
     }
-    applyTheme()
   })
 
   function toggle() {
     isDark.value = !isDark.value
     localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
     applyTheme()
+    
+    // Optionally sync with backend user preference
+    router.put(route('settings.update'), {
+      dark_mode_preference: isDark.value ? 'dark' : 'light'
+    }, { preserveScroll: true, preserveState: true })
   }
 
   function setMode(mode) {
@@ -35,7 +45,9 @@ export function useTheme() {
   }
 
   function applyTheme() {
-    document.documentElement.classList.toggle('dark', isDark.value)
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.toggle('dark', isDark.value)
+    }
   }
 
   return { isDark, toggle, setMode }

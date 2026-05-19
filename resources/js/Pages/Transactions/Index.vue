@@ -87,11 +87,23 @@ function exportData(format) {
             </select>
           </div>
           <div>
-            <label class="block text-xs text-gray-400 mb-1">Dari</label>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-xs text-gray-400">Dari</label>
+              <div class="flex items-center gap-2">
+                <button type="button" @click="dateFrom = ''; applyFilters()" class="text-[10px] text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">Clear</button>
+                <button type="button" @click="dateFrom = new Date().toISOString().split('T')[0]; applyFilters()" class="text-[10px] text-brand-600 dark:text-brand-400 hover:text-brand-700">Hari Ini</button>
+              </div>
+            </div>
             <input v-model="dateFrom" @change="applyFilters" type="date" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500" />
           </div>
           <div>
-            <label class="block text-xs text-gray-400 mb-1">Sampai</label>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-xs text-gray-400">Sampai</label>
+              <div class="flex items-center gap-2">
+                <button type="button" @click="dateTo = ''; applyFilters()" class="text-[10px] text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">Clear</button>
+                <button type="button" @click="dateTo = new Date().toISOString().split('T')[0]; applyFilters()" class="text-[10px] text-brand-600 dark:text-brand-400 hover:text-brand-700">Hari Ini</button>
+              </div>
+            </div>
             <input v-model="dateTo" @change="applyFilters" type="date" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500" />
           </div>
         </div>

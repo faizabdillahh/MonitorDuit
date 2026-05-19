@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
 import { useTheme } from '@/Composables/useTheme'
 import { useToast } from '@/Composables/useToast'
@@ -13,12 +13,20 @@ const props = defineProps({
 })
 
 const { isDark, toggle } = useTheme()
-const { toasts } = useToast()
+const { toasts, success } = useToast()
 const page = usePage()
 const user = computed(() => page.props.auth?.user)
 const flash = computed(() => page.props.flash)
 const userMenuOpen = ref(false)
 const unreadCount = computed(() => page.props.unreadNotifications || 0)
+
+watch(() => flash.value?.success, (newVal) => {
+  if (newVal) {
+    success(newVal)
+    // Clear flash in inertia page props so it doesn't re-trigger on back/forward
+    page.props.flash.success = null
+  }
+}, { immediate: true })
 
 // Bottom nav (Instagram-style: 5 items max)
 const bottomNavLinks = [
@@ -48,7 +56,7 @@ function isActive(routeName) {
   <div class="min-h-screen bg-[#fafafa] dark:bg-black text-gray-900 dark:text-gray-100 font-sans">
 
     <!-- Toast Notifications -->
-    <div class="fixed top-4 left-1/2 -translate-x-1/2 z-[200] space-y-2 w-full max-w-sm px-4">
+    <div class="fixed top-20 left-1/2 -translate-x-1/2 z-[200] space-y-2 w-full max-w-sm px-4 pointer-events-none">
       <TransitionGroup
         enter-active-class="transition duration-300 ease-out"
         enter-from-class="translate-y-[-12px] opacity-0 scale-95"
@@ -70,10 +78,6 @@ function isActive(routeName) {
           {{ toast.message }}
         </div>
       </TransitionGroup>
-
-      <div v-if="flash?.success" class="px-4 py-3 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium text-center shadow-lg">
-        {{ flash.success }}
-      </div>
     </div>
 
     <!-- Top Bar (Instagram-style) -->

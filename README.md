@@ -5,7 +5,7 @@
 <h1 align="center">MonitorDuit 💸</h1>
 
 <p align="center">
-  <strong>Aplikasi Pencatatan Keuangan Pribadi Cerdas dengan Integrasi AI Pemindai Struk (Versi 1.2.0)</strong>
+  <strong>Aplikasi Pencatatan Keuangan Pribadi Cerdas dengan Integrasi AI Pemindai Struk (Versi 1.2.1)</strong>
 </p>
 
 ---

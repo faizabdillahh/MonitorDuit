@@ -51,17 +51,17 @@ const chartOptions = {
 
     <!-- Stories-like: Summary Cards (horizontal scroll on mobile) -->
     <div class="flex gap-3 overflow-x-auto pb-1 mb-5 -mx-4 px-4 scrollbar-hide">
-      <div class="flex-shrink-0 w-[160px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
+      <div class="flex-shrink-0 min-w-[150px] w-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
         <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium">Bulan ini</p>
-        <p class="text-lg font-bold font-mono text-gray-900 dark:text-white mt-1.5 truncate">{{ formatCurrency(summary.monthly_total) }}</p>
+        <p class="text-lg font-bold font-mono text-gray-900 dark:text-white mt-1.5 whitespace-nowrap">{{ formatCurrency(summary.monthly_total) }}</p>
       </div>
-      <div class="flex-shrink-0 w-[140px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
+      <div class="flex-shrink-0 min-w-[130px] w-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
         <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium">Transaksi</p>
-        <p class="text-lg font-bold font-mono text-gray-900 dark:text-white mt-1.5">{{ summary.monthly_count }}</p>
+        <p class="text-lg font-bold font-mono text-gray-900 dark:text-white mt-1.5 whitespace-nowrap">{{ summary.monthly_count }}</p>
       </div>
-      <div class="flex-shrink-0 w-[160px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
+      <div class="flex-shrink-0 min-w-[150px] w-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
         <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium">Rata-rata/hari</p>
-        <p class="text-lg font-bold font-mono text-gray-900 dark:text-white mt-1.5 truncate">{{ formatCurrency(summary.daily_average) }}</p>
+        <p class="text-lg font-bold font-mono text-gray-900 dark:text-white mt-1.5 whitespace-nowrap">{{ formatCurrency(summary.daily_average) }}</p>
       </div>
       <!-- Scan CTA card -->
       <Link :href="route('transactions.create')" class="flex-shrink-0 w-[120px] bg-gray-900 dark:bg-white border border-gray-800 dark:border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center gap-2 hover:opacity-90 transition-opacity">

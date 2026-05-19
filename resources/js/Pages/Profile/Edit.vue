@@ -3,7 +3,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
-import { Head, usePage } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 
 const user = usePage().props.auth?.user
 
@@ -66,6 +66,35 @@ defineProps({
                 </div>
                 <div class="p-5">
                     <DeleteUserForm class="max-w-lg" />
+                </div>
+            </div>
+
+            <!-- Informasi & Bantuan -->
+            <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden mt-8">
+                <div class="px-5 py-3 border-b border-gray-100 dark:border-gray-800">
+                    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Informasi</h2>
+                </div>
+                <div class="p-2 flex flex-col">
+                    <Link :href="route('about')" class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors rounded-lg flex items-center justify-between">
+                        Tentang Kami
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </Link>
+                    <Link :href="route('help')" class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors rounded-lg flex items-center justify-between">
+                        Pusat Bantuan
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </Link>
+                    <Link :href="route('privacy')" class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors rounded-lg flex items-center justify-between">
+                        Kebijakan Privasi
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </Link>
+                    <Link :href="route('terms')" class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors rounded-lg flex items-center justify-between">
+                        Syarat & Ketentuan
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </Link>
+                </div>
+                <div class="px-5 py-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 flex justify-between items-center text-xs text-gray-400">
+                    <p>&copy; {{ new Date().getFullYear() }} MonitorDuit</p>
+                    <p>Versi 1.2.1</p>
                 </div>
             </div>
         </div>

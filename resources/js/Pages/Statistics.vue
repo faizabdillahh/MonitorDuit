@@ -90,22 +90,22 @@ const donutOptions = {
     </div>
 
     <!-- Summary -->
-    <div class="grid grid-cols-3 gap-3 mb-4">
-      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
-        <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium">Total</p>
-        <p class="text-base sm:text-lg font-bold font-mono text-gray-900 dark:text-white mt-1 truncate">{{ formatCurrency(summary.total_amount) }}</p>
-        <div v-if="summary.change_percent !== null" class="mt-1 flex items-center gap-1 text-xs">
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 mb-4">
+      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-3 sm:p-4 text-center sm:text-left">
+        <p class="text-[10px] sm:text-[11px] text-gray-400 uppercase tracking-wider font-medium">Total</p>
+        <p class="text-sm sm:text-base md:text-lg font-bold font-mono text-gray-900 dark:text-white mt-1 sm:truncate break-words leading-tight">{{ formatCurrency(summary.total_amount) }}</p>
+        <div v-if="summary.change_percent !== null" class="mt-1 flex items-center justify-center sm:justify-start gap-1 text-[10px] sm:text-xs">
           <span v-if="summary.change_percent > 0" class="text-red-500 flex items-center gap-0.5"><TrendingUp class="w-3 h-3" />{{ summary.change_percent }}%</span>
           <span v-else-if="summary.change_percent < 0" class="text-brand-500 flex items-center gap-0.5"><TrendingDown class="w-3 h-3" />{{ Math.abs(summary.change_percent) }}%</span>
         </div>
       </div>
-      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
-        <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium">Rata-rata</p>
-        <p class="text-base sm:text-lg font-bold font-mono text-gray-900 dark:text-white mt-1 truncate">{{ formatCurrency(summary.daily_average) }}</p>
+      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-3 sm:p-4 text-center sm:text-left">
+        <p class="text-[10px] sm:text-[11px] text-gray-400 uppercase tracking-wider font-medium">Rata-rata</p>
+        <p class="text-sm sm:text-base md:text-lg font-bold font-mono text-gray-900 dark:text-white mt-1 sm:truncate break-words leading-tight">{{ formatCurrency(summary.daily_average) }}</p>
       </div>
-      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
-        <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium">Top</p>
-        <p class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mt-1 truncate">{{ summary.top_category || '-' }}</p>
+      <div class="col-span-2 sm:col-span-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-3 sm:p-4 text-center sm:text-left">
+        <p class="text-[10px] sm:text-[11px] text-gray-400 uppercase tracking-wider font-medium">Top</p>
+        <p class="text-sm sm:text-base md:text-lg font-bold text-gray-900 dark:text-white mt-1 sm:truncate break-words leading-tight">{{ summary.top_category || '-' }}</p>
       </div>
     </div>
 

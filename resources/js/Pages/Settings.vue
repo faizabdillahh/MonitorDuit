@@ -21,6 +21,16 @@ const prefForm = useForm({
   default_currency: props.user.default_currency || 'IDR',
 })
 
+import { watch } from 'vue'
+const { isDark } = useTheme()
+
+watch(isDark, (newVal) => {
+  // Hanya ubah form state jika saat ini setting bukan system (karena toggle button mengubah ke light/dark)
+  if (prefForm.dark_mode_preference !== 'system') {
+    prefForm.dark_mode_preference = newVal ? 'dark' : 'light'
+  }
+})
+
 function savePreferences() {
   prefForm.put(route('settings.update'), {
     preserveScroll: true,
@@ -130,15 +140,15 @@ function closeDeleteModal() {
               <label class="block text-xs font-medium text-gray-500 mb-2">Tema Aplikasi</label>
               <div class="grid grid-cols-3 gap-2">
                 <label :class="['cursor-pointer p-3 border rounded-lg text-center transition-colors', prefForm.dark_mode_preference === 'light' ? 'border-brand-500 bg-brand-50 dark:bg-brand-500/10 text-brand-700 dark:text-brand-400' : 'border-gray-200 dark:border-gray-700 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800']">
-                  <input type="radio" v-model="prefForm.dark_mode_preference" value="light" class="hidden" />
+                  <input type="radio" v-model="prefForm.dark_mode_preference" value="light" class="hidden" @change="setMode(prefForm.dark_mode_preference)" />
                   <Sun class="w-5 h-5 mx-auto mb-1.5" /><span class="text-xs font-medium">Terang</span>
                 </label>
                 <label :class="['cursor-pointer p-3 border rounded-lg text-center transition-colors', prefForm.dark_mode_preference === 'dark' ? 'border-brand-500 bg-brand-50 dark:bg-brand-500/10 text-brand-700 dark:text-brand-400' : 'border-gray-200 dark:border-gray-700 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800']">
-                  <input type="radio" v-model="prefForm.dark_mode_preference" value="dark" class="hidden" />
+                  <input type="radio" v-model="prefForm.dark_mode_preference" value="dark" class="hidden" @change="setMode(prefForm.dark_mode_preference)" />
                   <Moon class="w-5 h-5 mx-auto mb-1.5" /><span class="text-xs font-medium">Gelap</span>
                 </label>
                 <label :class="['cursor-pointer p-3 border rounded-lg text-center transition-colors', prefForm.dark_mode_preference === 'system' ? 'border-brand-500 bg-brand-50 dark:bg-brand-500/10 text-brand-700 dark:text-brand-400' : 'border-gray-200 dark:border-gray-700 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800']">
-                  <input type="radio" v-model="prefForm.dark_mode_preference" value="system" class="hidden" />
+                  <input type="radio" v-model="prefForm.dark_mode_preference" value="system" class="hidden" @change="setMode(prefForm.dark_mode_preference)" />
                   <Monitor class="w-5 h-5 mx-auto mb-1.5" /><span class="text-xs font-medium">Sistem</span>
                 </label>
               </div>

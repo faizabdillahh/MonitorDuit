@@ -122,7 +122,7 @@ function submit() {
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Scan Receipt Column -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col items-center justify-center min-h-[300px]">
-          <input type="file" ref="fileInput" class="hidden" accept="image/jpeg,image/png,image/webp,image/heic" @change="handleFileChange" />
+          <input type="file" ref="fileInput" class="hidden" accept="image/*,image/jpeg,image/png,image/webp,image/heic" @change="handleFileChange" />
           
           <div v-if="!previewUrl" class="text-center w-full">
             <div class="w-16 h-16 bg-brand-50 dark:bg-brand-500/10 text-brand-500 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-brand-100 dark:border-brand-500/20">
@@ -204,7 +204,13 @@ function submit() {
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tanggal Transaksi <span class="text-red-500">*</span></label>
+              <div class="flex items-center justify-between mb-1">
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Tanggal Transaksi <span class="text-red-500">*</span></label>
+                <div class="flex items-center gap-3">
+                  <button type="button" @click="form.transaction_date = ''" class="text-xs font-medium text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">Clear</button>
+                  <button type="button" @click="form.transaction_date = new Date().toISOString().split('T')[0]" class="text-xs font-medium text-brand-600 dark:text-brand-400 hover:text-brand-700">Hari Ini</button>
+                </div>
+              </div>
               <input v-model="form.transaction_date" type="date" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500" required :class="{'ring-2 ring-brand-500': form.source === 'ai' && form.transaction_date}" />
               <p v-if="form.errors.transaction_date" class="text-red-500 text-xs mt-1">{{ form.errors.transaction_date }}</p>
             </div>

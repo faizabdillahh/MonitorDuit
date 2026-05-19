@@ -38,6 +38,6 @@ class SettingsController extends Controller
             'notif_reminder_email', 'reminder_idle_days',
         ]));
 
-        return back()->with('success', 'Pengaturan berhasil disimpan!');
+        return back();
     }
 }

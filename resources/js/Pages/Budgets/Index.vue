@@ -159,7 +159,7 @@ function formatRp(n) {
           :key="item.budget.id"
           class="p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group"
         >
-          <div class="flex items-center justify-between mb-2">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0 mb-2">
             <div class="flex items-center gap-2.5 min-w-0">
               <span class="text-lg shrink-0">{{ item.budget.category?.icon }}</span>
               <div class="min-w-0">
@@ -172,37 +172,42 @@ function formatRp(n) {
               </div>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
               <span class="text-xs font-mono" :class="{
                 'text-brand-600': item.status === 'normal',
                 'text-amber-600': item.status === 'warning',
                 'text-red-600': item.status === 'exceeded',
               }">{{ formatRp(item.spent) }} / {{ formatRp(item.budget.amount) }}</span>
-              <div class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button @click="openEditModal(item)" class="p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-md"><Edit2 class="w-3.5 h-3.5" /></button>
-                <button @click="confirmDeleteBudget(item.budget.id)" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-md"><Trash2 class="w-3.5 h-3.5" /></button>
+              <div class="flex items-center gap-0.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                <button @click="openEditModal(item)" class="p-2 sm:p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-md"><Edit2 class="w-4 h-4 sm:w-3.5 sm:h-3.5" /></button>
+                <button @click="confirmDeleteBudget(item.budget.id)" class="p-2 sm:p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-md"><Trash2 class="w-4 h-4 sm:w-3.5 sm:h-3.5" /></button>
               </div>
             </div>
           </div>
 
           <!-- Progress Bar -->
-          <div class="flex items-center gap-3">
-            <div class="flex-1 h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-              <div
-                class="h-full rounded-full transition-all duration-500"
-                :class="{
-                  'bg-brand-500': item.status === 'normal',
-                  'bg-amber-500': item.status === 'warning',
-                  'bg-red-500': item.status === 'exceeded',
-                }"
-                :style="{ width: Math.min(item.percentage, 100) + '%' }"
-              ></div>
+          <div class="flex flex-col gap-1">
+            <div class="flex items-center gap-3">
+              <div class="flex-1 h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                <div
+                  class="h-full rounded-full transition-all duration-500"
+                  :class="{
+                    'bg-brand-500': item.status === 'normal',
+                    'bg-amber-500': item.status === 'warning',
+                    'bg-red-500': item.status === 'exceeded',
+                  }"
+                  :style="{ width: Math.min(item.percentage, 100) + '%' }"
+                ></div>
+              </div>
+              <span class="text-xs font-mono w-10 text-right" :class="{
+                'text-brand-600': item.status === 'normal',
+                'text-amber-600': item.status === 'warning',
+                'text-red-600': item.status === 'exceeded',
+              }">{{ item.percentage }}%</span>
             </div>
-            <span class="text-xs font-mono w-10 text-right" :class="{
-              'text-brand-600': item.status === 'normal',
-              'text-amber-600': item.status === 'warning',
-              'text-red-600': item.status === 'exceeded',
-            }">{{ item.percentage }}%</span>
+            <div v-if="item.projected > 0" class="text-[10px] text-gray-400 pl-1">
+              *Telah dicadangkan {{ formatRp(item.projected) }} untuk transaksi rutin (recurring) yang akan datang.
+            </div>
           </div>
         </div>
       </div>

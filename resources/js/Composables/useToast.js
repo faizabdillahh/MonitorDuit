@@ -4,7 +4,7 @@ const toasts = ref([])
 let toastId = 0
 
 export function useToast() {
-  function show(message, type = 'success', duration = 3000) {
+  function show(message, type = 'success', duration = 2000) {
     const id = ++toastId
     toasts.value.push({ id, message, type })
     setTimeout(() => {

@@ -50,6 +50,9 @@ class RecurringTransactionController extends Controller
 
         RecurringTransaction::create($data);
 
+        // Process immediately if the start_date was in the past
+        app(\App\Services\RecurringTransactionService::class)->processUserDue(auth()->user());
+
         return back()->with('success', 'Recurring transaction berhasil ditambahkan!');
     }
 
@@ -68,6 +71,9 @@ class RecurringTransactionController extends Controller
 
         $recurring->update($data);
 
+        // Process immediately if it falls behind
+        app(\App\Services\RecurringTransactionService::class)->processUserDue(auth()->user());
+
         return back()->with('success', 'Recurring transaction berhasil diperbarui!');
     }
 
@@ -76,6 +82,10 @@ class RecurringTransactionController extends Controller
         abort_if($recurring->user_id !== auth()->id(), 403);
 
         $recurring->update(['is_active' => !$recurring->is_active]);
+
+        if ($recurring->is_active) {
+            app(\App\Services\RecurringTransactionService::class)->processUserDue(auth()->user());
+        }
 
         return back()->with('success', $recurring->is_active ? 'Diaktifkan' : 'Dinonaktifkan');
     }

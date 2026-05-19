@@ -87,7 +87,13 @@ function closeModal() {
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tanggal Transaksi <span class="text-red-500">*</span></label>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Tanggal Transaksi <span class="text-red-500">*</span></label>
+              <div class="flex items-center gap-3">
+                <button type="button" @click="form.transaction_date = ''" class="text-xs font-medium text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">Clear</button>
+                <button type="button" @click="form.transaction_date = new Date().toISOString().split('T')[0]" class="text-xs font-medium text-brand-600 dark:text-brand-400 hover:text-brand-700">Hari Ini</button>
+              </div>
+            </div>
             <input v-model="form.transaction_date" type="date" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500" required />
           </div>
 

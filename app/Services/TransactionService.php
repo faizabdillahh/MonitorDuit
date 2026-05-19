@@ -62,6 +62,7 @@ class TransactionService
             'ai_confidence'      => $data['ai_confidence'] ?? null,
             'ai_raw_response'    => $data['ai_raw_response'] ?? null,
             'receipt_image_path' => $data['receipt_image_path'] ?? null,
+            'recurring_transaction_id' => $data['recurring_transaction_id'] ?? null,
         ]);
 
         // Reset reminder

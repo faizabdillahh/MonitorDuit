@@ -76,10 +76,10 @@ defineProps({
             </div>
 
             <!-- Features Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-24 max-w-5xl mx-auto w-full text-left px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-16 sm:mt-24 max-w-5xl mx-auto w-full text-left px-4">
                 <!-- Feature 1 -->
-                <div class="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-brand-300 dark:hover:border-brand-700 transition-colors">
-                    <div class="w-12 h-12 bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 rounded-xl flex items-center justify-center mb-6">
+                <div class="bg-white dark:bg-gray-900 p-5 sm:p-6 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-brand-300 dark:hover:border-brand-700 transition-colors">
+                    <div class="w-12 h-12 bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 rounded-xl flex items-center justify-center mb-5 sm:mb-6">
                         <Camera class="w-6 h-6" />
                     </div>
                     <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Scan Pintar AI</h3>
@@ -89,8 +89,8 @@ defineProps({
                 </div>
                 
                 <!-- Feature 2 -->
-                <div class="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-brand-300 dark:hover:border-brand-700 transition-colors">
-                    <div class="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center mb-6">
+                <div class="bg-white dark:bg-gray-900 p-5 sm:p-6 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-brand-300 dark:hover:border-brand-700 transition-colors">
+                    <div class="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center mb-5 sm:mb-6">
                         <BarChart2 class="w-6 h-6" />
                     </div>
                     <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Analitik Visual</h3>
@@ -100,8 +100,8 @@ defineProps({
                 </div>
                 
                 <!-- Feature 3 -->
-                <div class="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-brand-300 dark:hover:border-brand-700 transition-colors">
-                    <div class="w-12 h-12 bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center mb-6">
+                <div class="bg-white dark:bg-gray-900 p-5 sm:p-6 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-brand-300 dark:hover:border-brand-700 transition-colors">
+                    <div class="w-12 h-12 bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center mb-5 sm:mb-6">
                         <Moon class="w-6 h-6" />
                     </div>
                     <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Desain Premium</h3>
