@@ -21,13 +21,15 @@ Aplikasi ini dibangun menggunakan arsitektur *monolith* modern (*Laravel + Vue.j
 ## ✨ Fitur Utama
 
 - 🤖 **AI Receipt Scanner:** Menggunakan model `gemini-2.5-flash` untuk membaca teks pada struk belanja dan mengubahnya menjadi data transaksi terstruktur.
+- 📝 **Pencatatan Transaksi Cepat:** Tambahkan transaksi manual dengan sangat cepat dan intuitif.
+- 🎯 **Budgeting (Anggaran):** Batasi dan pantau pengeluaran per kategori setiap bulannya agar keuangan tetap terkontrol.
 - 🔁 **Transaksi Berulang (Recurring):** Otomatisasi pengeluaran rutin (harian, mingguan, bulanan, tahunan) tanpa perlu input ulang.
 - 📊 **Dashboard & Statistik:** Visualisasi pengeluaran bulanan dan harian menggunakan grafik interaktif (Bar & Doughnut Chart) yang akurat.
 - 🌓 **Smart Theme System:** Dukungan penuh untuk Mode Terang (*Light Mode*) dan Mode Gelap (*Dark Mode*) dengan preferensi yang tersimpan di basis data pengguna.
 - 🏷️ **Kategori Kustom & Emoji Picker:** Personalisasi kategori pengeluaran secara *full custom* lengkap dengan pilihan warna dan *icon/emoji picker* yang interaktif.
 - 📥 **Export Laporan:** Mengunduh riwayat transaksi ke dalam format *Excel (.xlsx)* yang diformat secara profesional.
 - 🔐 **Autentikasi Aman:** Sistem pendaftaran, masuk, verifikasi email, dan pengaturan profil bawaan yang diperkuat oleh sistem keamanan Laravel.
-- 📄 **Halaman Informasi (Static Pages):** Menyediakan halaman Tentang Kami, Pusat Bantuan, Kebijakan Privasi, dan Syarat & Ketentuan yang terintegrasi penuh melalui arsitektur SPA Inertia.
+- 📄 **Halaman Informasi (Static Pages):** Menyediakan halaman Tentang Kami, Pusat Bantuan, Kebijakan Privasi, dan Syarat & Ketentuan.
 
 ---
 
