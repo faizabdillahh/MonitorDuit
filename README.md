@@ -5,7 +5,7 @@
 <h1 align="center">MonitorDuit 💸</h1>
 
 <p align="center">
-  <strong>Aplikasi Pencatatan Keuangan Pribadi Cerdas dengan Integrasi AI Pemindai Struk (Versi 1.2.1)</strong>
+  <strong>Aplikasi Pencatatan Keuangan Pribadi Cerdas dengan Integrasi AI Pemindai Struk (Versi 1.2.2)</strong>
 </p>
 
 ---
@@ -15,6 +15,14 @@
 **MonitorDuit** adalah aplikasi pencatatan pengeluaran pribadi modern yang dirancang untuk menghilangkan kerumitan input data manual. Dengan bantuan **Kecerdasan Buatan (Google Gemini AI)**, pengguna cukup memotret struk belanja, dan sistem akan secara otomatis mengekstrak nominal, nama merchant, serta tanggal transaksi. 
 
 Aplikasi ini dibangun menggunakan arsitektur *monolith* modern (*Laravel + Vue.js + Inertia.js*) dan didesain dengan antarmuka bergaya *Instagram / Minimalist Mobile-First* interaktif menggunakan Tailwind CSS v4.
+
+---
+
+## 🚀 Apa yang Baru di v1.2.2?
+- **Peningkatan UX Autentikasi:** Pesan error untuk email dan kata sandi kini terpisah dengan indikator field yang lebih akurat, serta penambahan fitur *Toggle Eye* untuk melihat/menyembunyikan kata sandi.
+- **Validasi Nominal Ketat:** Perlindungan dua lapis (Frontend & Backend) untuk mencegah *database crash* jika diinput angka ekstrem (maksimal Rp 9.999.999.999.999).
+- **Penamaan Kustom:** Anda kini bisa memberikan nama kustom pada setiap *Budget* dan *Recurring Transaction* (contoh: "Tagihan Listrik Rumah", "Belanja Bulanan").
+- **Penyempurnaan UI/UX:** Warna tombol yang lebih konsisten dan perbaikan ukuran maksimal pada input catatan (textarea) agar teks selalu terlihat rapi.
 
 ---
 
@@ -61,7 +69,7 @@ Pastikan komputer Anda sudah terinstal perangkat lunak berikut:
 
 ### 2. Kloning Repositori
 ```bash
-git clone https://github.com/username/monitorduit.git
+git clone https://github.com/faizabdillahh/MonitorDuit
 cd monitorduit
 ```
 

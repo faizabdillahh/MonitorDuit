@@ -10,6 +10,7 @@ class Budget extends Model
     protected $fillable = [
         'user_id',
         'category_id',
+        'name',
         'amount',
         'is_recurring',
         'month',

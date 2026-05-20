@@ -127,7 +127,7 @@ defineProps({
                 </div>
                 <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center text-xs text-gray-400">
                     <p>&copy; {{ new Date().getFullYear() }} MonitorDuit.</p>
-                    <p>Versi 1.2.1</p>
+                    <p>Versi 1.2.2</p>
                 </div>
             </div>
         </footer>

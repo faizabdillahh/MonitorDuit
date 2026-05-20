@@ -37,10 +37,13 @@ class BudgetController extends Controller
     {
         $request->validate([
             'category_id'  => ['required', 'exists:categories,id'],
-            'amount'       => ['required', 'numeric', 'min:1'],
+            'name'         => ['nullable', 'string', 'max:100'],
+            'amount'       => ['required', 'numeric', 'min:1', 'max:9999999999999'],
             'is_recurring' => ['boolean'],
             'month'        => ['nullable', 'integer', 'between:1,12'],
             'year'         => ['nullable', 'integer', 'min:2024'],
+        ], [
+            'amount.max' => 'Batas budget maksimal Rp 9.999.999.999.999.',
         ]);
 
         $this->budgetService->createBudget($request->user(), $request->all());
@@ -53,13 +56,16 @@ class BudgetController extends Controller
         abort_if($budget->user_id !== auth()->id(), 403);
 
         $request->validate([
-            'amount'       => ['required', 'numeric', 'min:1'],
+            'name'         => ['nullable', 'string', 'max:100'],
+            'amount'       => ['required', 'numeric', 'min:1', 'max:9999999999999'],
             'is_recurring' => ['boolean'],
             'month'        => ['nullable', 'integer', 'between:1,12'],
             'year'         => ['nullable', 'integer', 'min:2024'],
+        ], [
+            'amount.max' => 'Batas budget maksimal Rp 9.999.999.999.999.',
         ]);
 
-        $data = $request->only(['amount', 'is_recurring', 'month', 'year']);
+        $data = $request->only(['name', 'amount', 'is_recurring', 'month', 'year']);
 
         if ($data['is_recurring'] ?? $budget->is_recurring) {
             $data['month'] = null;

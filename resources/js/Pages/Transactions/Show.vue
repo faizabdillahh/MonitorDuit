@@ -78,7 +78,16 @@ function closeModal() {
         <form v-if="isEditing" @submit.prevent="submit" class="space-y-4">
           <div>
             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Total Harga <span class="text-red-500">*</span></label>
-            <input v-model="form.total_amount" type="number" step="0.01" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500" required />
+            <input v-model="form.total_amount" type="number" step="0.01" min="1" max="9999999999999"
+              class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500"
+              required
+              @invalid="(e) => e.target.setCustomValidity(e.target.value === '' ? 'Total harga wajib diisi.' : (Number(e.target.value) < 1 ? 'Total harga minimal Rp 1.' : 'Nominal terlalu besar (maks. Rp 9.999.999.999.999).'))"
+              @input="(e) => e.target.setCustomValidity('')"
+            />
+            <p v-if="form.errors.total_amount" class="text-red-500 dark:text-red-400 text-xs mt-1.5 font-medium flex items-center gap-1">
+              <svg class="w-3.5 h-3.5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              {{ form.errors.total_amount }}
+            </p>
           </div>
 
           <div>
@@ -106,7 +115,7 @@ function closeModal() {
 
           <div>
             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Catatan</label>
-            <textarea v-model="form.notes" rows="2" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+            <textarea v-model="form.notes" rows="2" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500 resize-y min-h-[64px]" style="min-height: 64px;"></textarea>
           </div>
 
           <div class="pt-4 flex justify-end gap-3">

@@ -20,6 +20,7 @@ const itemToDelete = ref(null)
 
 const form = useForm({
   category_id: '',
+  name: '',
   merchant_name: '',
   amount: '',
   frequency: 'monthly',
@@ -32,6 +33,7 @@ function openAddModal() {
   editingItem.value = null
   form.reset()
   form.category_id = props.categories[0]?.id || ''
+  form.name = ''
   form.start_date = new Date().toISOString().split('T')[0]
   form.frequency = 'monthly'
   showModal.value = true
@@ -40,6 +42,7 @@ function openAddModal() {
 function openEditModal(item) {
   editingItem.value = item
   form.category_id = item.category_id
+  form.name = item.name || ''
   form.merchant_name = item.merchant_name || ''
   form.amount = item.amount
   form.frequency = item.frequency
@@ -123,7 +126,7 @@ function formatDate(d) {
         <h1 class="text-xl font-semibold text-gray-900 dark:text-white">Recurring</h1>
         <p class="text-sm text-gray-400 mt-0.5">Pengeluaran berulang otomatis</p>
       </div>
-      <button @click="openAddModal" class="flex items-center gap-1.5 px-3 py-1.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity">
+      <button @click="openAddModal" class="flex items-center gap-1.5 px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium rounded-lg transition-colors">
         <Plus class="w-3.5 h-3.5" /> Tambah
       </button>
     </div>
@@ -147,10 +150,13 @@ function formatDate(d) {
           </div>
           <div class="flex-1 min-w-0">
             <p class="text-[13px] font-semibold text-gray-900 dark:text-white truncate">
-              {{ item.merchant_name || item.category?.name }}
+              {{ item.name || item.merchant_name || item.category?.name }}
             </p>
             <p class="text-xs text-gray-400 mt-0.5">
-              {{ freqLabel(item.frequency) }} · Berikutnya: {{ formatDate(item.next_run_date) }}
+              {{ item.name && item.merchant_name ? item.merchant_name + ' · ' : '' }}{{ item.category?.name }} · {{ freqLabel(item.frequency) }} · Berikutnya: {{ formatDate(item.next_run_date) }}
+            </p>
+            <p v-if="item.notes" class="text-[11px] text-gray-400 mt-1 italic border-l-2 border-gray-200 dark:border-gray-700 pl-1.5 truncate max-w-md">
+              "{{ item.notes }}"
             </p>
           </div>
         </div>
@@ -197,6 +203,11 @@ function formatDate(d) {
                 </div>
 
                 <div>
+                  <label class="block text-xs font-medium text-gray-500 mb-1">Nama Tagihan</label>
+                  <input v-model="form.name" type="text" placeholder="Contoh: Langganan Netflix, Listrik, dll." class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500" required />
+                </div>
+
+                <div>
                   <label class="block text-xs font-medium text-gray-500 mb-1">Merchant (opsional)</label>
                   <input v-model="form.merchant_name" type="text" placeholder="Netflix, PLN, dll." class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500" />
                 </div>
@@ -205,8 +216,15 @@ function formatDate(d) {
                   <label class="block text-xs font-medium text-gray-500 mb-1">Nominal</label>
                   <div class="relative">
                     <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">Rp</span>
-                    <input v-model="form.amount" type="number" min="1" class="w-full pl-9 pr-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500 font-mono" required />
+                    <input v-model="form.amount" type="number" min="1" max="9999999999999" class="w-full pl-9 pr-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500 font-mono" required
+                      @invalid="(e) => e.target.setCustomValidity(e.target.value === '' ? 'Nominal wajib diisi.' : (Number(e.target.value) < 1 ? 'Nominal minimal Rp 1.' : 'Nominal terlalu besar (maks. Rp 9.999.999.999.999).'))"
+                      @input="(e) => e.target.setCustomValidity('')"
+                    />
                   </div>
+                  <p v-if="form.errors.amount" class="text-red-500 dark:text-red-400 text-xs mt-1.5 font-medium flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    {{ form.errors.amount }}
+                  </p>
                 </div>
 
                 <div>
@@ -230,6 +248,11 @@ function formatDate(d) {
                 <div>
                   <label class="block text-xs font-medium text-gray-500 mb-1">Tanggal Berakhir (opsional)</label>
                   <input v-model="form.end_date" type="date" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500" />
+                </div>
+
+                <div>
+                  <label class="block text-xs font-medium text-gray-500 mb-1">Catatan (opsional)</label>
+                  <textarea v-model="form.notes" rows="2" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-brand-500 resize-y min-h-[64px]" placeholder="Opsional"></textarea>
                 </div>
 
                 <div class="flex gap-2 pt-2">

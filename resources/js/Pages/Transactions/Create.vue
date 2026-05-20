@@ -183,7 +183,13 @@ function submit() {
                 <select v-model="form.currency" class="w-24 px-3 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500 font-mono">
                   <option v-for="c in supportedCurrencies" :key="c" :value="c">{{ c }}</option>
                 </select>
-                <input v-model="form.total_amount" type="number" step="0.01" class="flex-1 px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500 font-mono" placeholder="0" required :class="{'ring-2 ring-brand-500': form.source === 'ai' && form.total_amount}" />
+                <input v-model="form.total_amount" type="number" step="0.01" min="1" max="9999999999999"
+                  class="flex-1 px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500 font-mono"
+                  placeholder="0" required
+                  :class="{'ring-2 ring-brand-500': form.source === 'ai' && form.total_amount}"
+                  @invalid="(e) => e.target.setCustomValidity(e.target.value === '' ? 'Total harga wajib diisi.' : (Number(e.target.value) < 1 ? 'Total harga minimal Rp 1.' : 'Nominal terlalu besar (maks. Rp 9.999.999.999.999).'))"
+                  @input="(e) => e.target.setCustomValidity('')"
+                />
               </div>
               <div v-if="form.currency !== 'IDR'" class="mt-2 p-3 bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 rounded-xl">
                 <label class="block text-xs font-medium text-blue-700 dark:text-blue-400 mb-1.5">Rate Konversi ke IDR (Opsional)</label>
@@ -252,7 +258,7 @@ function submit() {
 
             <div>
               <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Catatan</label>
-              <textarea v-model="form.notes" rows="2" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500" placeholder="Opsional"></textarea>
+              <textarea v-model="form.notes" rows="2" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500 resize-y min-h-[64px]" placeholder="Opsional" style="min-height: 64px;"></textarea>
               <p v-if="form.errors.notes" class="text-red-500 text-xs mt-1">{{ form.errors.notes }}</p>
             </div>
 

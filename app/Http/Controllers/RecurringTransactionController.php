@@ -36,12 +36,15 @@ class RecurringTransactionController extends Controller
     {
         $data = $request->validate([
             'category_id'  => ['required', 'exists:categories,id'],
+            'name'         => ['required', 'string', 'max:100'],
             'merchant_name'=> ['nullable', 'string', 'max:255'],
-            'amount'       => ['required', 'numeric', 'min:1'],
+            'amount'       => ['required', 'numeric', 'min:1', 'max:9999999999999'],
             'frequency'    => ['required', 'in:weekly,biweekly,monthly,yearly'],
             'start_date'   => ['required', 'date'],
             'end_date'     => ['nullable', 'date', 'after:start_date'],
             'notes'        => ['nullable', 'string', 'max:500'],
+        ], [
+            'amount.max' => 'Nominal transaksi maksimal Rp 9.999.999.999.999.'
         ]);
 
         $data['user_id']       = auth()->id();
@@ -62,11 +65,14 @@ class RecurringTransactionController extends Controller
 
         $data = $request->validate([
             'category_id'  => ['required', 'exists:categories,id'],
+            'name'         => ['required', 'string', 'max:100'],
             'merchant_name'=> ['nullable', 'string', 'max:255'],
-            'amount'       => ['required', 'numeric', 'min:1'],
+            'amount'       => ['required', 'numeric', 'min:1', 'max:9999999999999'],
             'frequency'    => ['required', 'in:weekly,biweekly,monthly,yearly'],
             'end_date'     => ['nullable', 'date'],
             'notes'        => ['nullable', 'string', 'max:500'],
+        ], [
+            'amount.max' => 'Nominal transaksi maksimal Rp 9.999.999.999.999.'
         ]);
 
         $recurring->update($data);

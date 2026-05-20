@@ -20,6 +20,7 @@ const budgetToDelete = ref(null)
 
 const form = useForm({
   category_id: '',
+  name: '',
   amount: '',
   is_recurring: true,
   month: null,
@@ -41,6 +42,7 @@ function openAddModal() {
   editingBudget.value = null
   form.reset()
   form.category_id = availableCategories.value[0]?.id || ''
+  form.name = ''
   form.is_recurring = true
   form.month = null
   form.year = null
@@ -50,6 +52,7 @@ function openAddModal() {
 function openEditModal(budgetData) {
   editingBudget.value = budgetData.budget
   form.category_id = budgetData.budget.category_id
+  form.name = budgetData.budget.name || ''
   form.amount = budgetData.budget.amount
   form.is_recurring = budgetData.budget.is_recurring
   form.month = budgetData.budget.month
@@ -164,11 +167,13 @@ function formatRp(n) {
               <span class="text-lg shrink-0">{{ item.budget.category?.icon }}</span>
               <div class="min-w-0">
                 <div class="flex items-center gap-1.5">
-                  <span class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ item.budget.category?.name }}</span>
+                  <span class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ item.budget.name || item.budget.category?.name }}</span>
                   <AlertTriangle v-if="item.status === 'warning'" class="w-3.5 h-3.5 text-amber-500 shrink-0" />
                   <XCircle v-if="item.status === 'exceeded'" class="w-3.5 h-3.5 text-red-500 shrink-0" />
                 </div>
-                <span class="text-xs text-gray-400">{{ item.budget.is_recurring ? 'Setiap bulan' : 'Bulan ini saja' }}</span>
+                <span class="text-xs text-gray-400">
+                  {{ item.budget.name ? item.budget.category?.name + ' • ' : '' }}{{ item.budget.is_recurring ? 'Setiap bulan' : 'Bulan ini saja' }}
+                </span>
               </div>
             </div>
 
@@ -238,11 +243,25 @@ function formatRp(n) {
               </div>
 
               <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Anggaran (opsional)</label>
+                <input v-model="form.name" type="text" placeholder="Contoh: Belanja Bulanan, Makan, dll." class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500" />
+              </div>
+
+              <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Batas Budget</label>
                 <div class="relative">
                   <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">Rp</span>
-                  <input v-model="form.amount" type="number" step="1" min="1" class="w-full pl-9 pr-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent font-mono" placeholder="1.500.000" required />
+                  <input v-model="form.amount" type="number" step="1" min="1" max="9999999999999"
+                    class="w-full pl-9 pr-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent font-mono"
+                    placeholder="1.500.000" required
+                    @invalid="(e) => e.target.setCustomValidity(e.target.value === '' ? 'Batas budget wajib diisi.' : (Number(e.target.value) < 1 ? 'Batas budget minimal Rp 1.' : 'Batas budget maksimal Rp 9.999.999.999.999.'))"
+                    @input="(e) => e.target.setCustomValidity('')"
+                  />
                 </div>
+                <p v-if="form.errors.amount" class="text-red-500 dark:text-red-400 text-xs mt-1.5 font-medium flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  {{ form.errors.amount }}
+                </p>
               </div>
 
               <div>
